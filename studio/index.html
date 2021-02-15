@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <title>Studio | Alice Live!</title>
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <!-- css -->
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- js (library) -->
+  <script src="./js/lib/trackingjs/tracking_v1.1.3.js"></script>
+  <script src="./js/lib/trackingjs/face_v1.1.3.js"></script>
+  <script src="./js/lib/tonejs/Tone_v14.7.39.js"></script>
+  <!-- js (application) -->
+  <script src="./js/source.js"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/customAlert.js"></script>
+  <script src="./js/canvas.js"></script>
+  <script src="./js/sound.js"></script>
+  <script src="./js/properties.js"></script>
+  <script src="./js/sourceManager.js"></script>
+  <script src="./js/webRTC.js"></script>
+  <script src="./js/comment.js"></script>
+  <script src="./js/unloadBlocker.js"></script>
+  <script src="./js/rightClickBlocker.js"></script>
+</head>
+<body>
+  <!-- preview -->
+  <div id="preview">
+    <canvas width="1280" height="720"></canvas>
+  </div>
+  <!-- setting -->
+  <div id="setting">
+    <div id="label">
+      <div id="visual" class="button">
+        <input type="radio" name="selectList" checked>
+        <img src="./images/label/visualSource.svg">
+        <!-- visual source -->
+        <div id="visualSource">
+          <p class="noSource">No Source</p>
+        </div>
+      </div>
+      <div id="sound" class="button">
+        <input type="radio" name="selectList">
+        <img src="./images/label/soundSource.svg">
+        <!-- sound source -->
+        <div id="soundSource">
+          <p class="noSource">No Source</p>
+        </div>
+      </div>
+    </div>
+    <!-- list controller -->
+    <div id="controller">
+      <div class="button add">
+        <img src="./images/icons/controller/add.svg">
+      </div>
+      <div class="button remove">
+        <img src="./images/icons/controller/remove.svg">
+      </div>
+      <div class="button up">
+        <img src="./images/icons/controller/up.svg">
+      </div>
+      <div class="button down">
+        <img src="./images/icons/controller/down.svg">
+      </div>
+      <div class="box loopBack">
+        <p>Loop-Back</p>
+        <div class="checkbox">
+          <input type="checkbox">
+          <div></div>
+        </div>
+        <input id="rangeSwitch" type="checkbox" checked>
+        <div class="range">
+          <div class="rangeBar"></div>
+          <input type="range" min="0" max="1" step="0.01" value="1">
+        </div>
+      </div>
+      <div class="box pause">
+        <p>Pause</p>
+        <div class="checkbox">
+          <input type="checkbox">
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <!-- properties -->
+    <div id="properties">
+      <div id="label">
+        <img src="./images/label/properties.svg">
+      </div>
+      <div id="tools">
+        <input id="visualSwitch" type="checkbox" name="switch" checked>
+        <input id="soundSwitch" type="checkbox" name="switch" checked>
+        <div id="visual">
+          <div id="referencePoints">
+            <input class="radio0" type="radio" name="referencePoints">
+            <div class="radio0"></div>
+            <input class="radio1" type="radio" name="referencePoints">
+            <div class="radio1"></div>
+            <input class="radio2" type="radio" name="referencePoints">
+            <div class="radio2"></div>
+            <input class="radio3" type="radio" name="referencePoints">
+            <div class="radio3"></div>
+            <input class="radio4" type="radio" name="referencePoints">
+            <div class="radio4"></div>
+            <input class="radio5" type="radio" name="referencePoints">
+            <div class="radio5"></div>
+            <input class="radio6" type="radio" name="referencePoints">
+            <div class="radio6"></div>
+            <input class="radio7" type="radio" name="referencePoints">
+            <div class="radio7"></div>
+            <input class="radio8" type="radio" name="referencePoints">
+            <div class="radio8"></div>
+          </div>
+          <div id="deformation">
+            <div class="box x">
+              <div></div>
+              <input type="number" step="1">
+            </div>
+            <div class="box y">
+              <div></div>
+              <input type="number" step="1">
+            </div>
+            <div class="box w">
+              <div></div>
+              <input type="number" step="1">
+            </div>
+            <div class="box h">
+              <div></div>
+              <input type="number" step="1">
+            </div>
+            <div class="aspectRatioLock">
+              <input type="checkbox">
+              <div></div>
+            </div>
+          </div>
+        </div>
+        <div id="sound">
+          <input id="playAndPauseSwitch" type="checkbox">
+          <div id="playAndPause">
+            <input type="checkbox">
+            <div class="button"></div>
+            <div class="label"></div>
+          </div>
+          <input id="loopSwitch" type="checkbox">
+          <div id="muteAndLoop">
+            <div class="mute">
+              <div class="label"></div>
+              <div class="checkbox">
+                <input type="checkbox">
+                <div></div>
+              </div>
+            </div>
+            <div class="loop">
+              <div class="label"></div>
+              <div class="checkbox">
+                <input type="checkbox">
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div id="volume">
+            <div class="label"></div>
+            <div class="range">
+              <div></div>
+              <input type="range" min="0" max="200" value="0" step="1">
+            </div>
+            <div class="value">
+              <p>0 %</p>
+            </div>
+          </div>
+        </div>
+        <div id="other">
+          <input id="gateSwitch" type="checkbox" checked>
+          <div id="gate">
+            <div class="label"></div>
+            <div class="range">
+              <div class="gateBar"></div>
+              <div class="volumeBar"></div>
+              <input type="range" min="0" max="128" value="0" step="1">
+            </div>
+            <div class="value">
+              <p>0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- visual source type -->
+  <div id="visualSourceType">
+    <div class="list">
+      <p id="avatar">Avatar</p>
+      <p id="picture">Picture</p>
+      <p id="capture">Screen Capture</p>
+      <p id="comment">Comment Viewer</p>
+    </div>
+  </div>
+  <!-- sound source type -->
+  <div id="soundSourceType">
+    <div class="list">
+      <p id="voiceChanger">Voice Changer</p>
+      <p id="input">Sound Input</p>
+      <p id="file">Sound File</p>
+    </div>
+  </div>
+  <!-- custom alert -->
+  <input id="customAlertCheckbox" type="checkbox">
+  <div id="customAlert">
+    <h1 class="title"></h1>
+    <div class="detail"></div>
+    <div class="button">
+      <p>OK</p>
+    </div>
+  </div>
+</body>
+</html>

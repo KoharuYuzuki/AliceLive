@@ -1,0 +1,890 @@
+$mainColor: #555555;
+$subColor: #353535;
+$activeColor: #252525;
+$selectedColor: #2CA9E1;
+$white: #DDDDDD;
+$black: #000000;
+$gray: #888888;
+$clear: rgba(0, 0, 0, 0);
+$orange: #FF8300;
+
+body {
+  margin: 0;
+  user-select: none;
+}
+
+img {
+  pointer-events: none;
+}
+
+p {
+  color: $white;
+}
+
+p, h1, input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  border: none;
+  border-radius: 2.5px;
+  background-color: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2.5px;
+  background-color: $subColor;
+}
+
+#preview, #setting {
+  width: 100%;
+  position: absolute;
+  margin: auto;
+}
+
+#preview {
+  height: 60%;
+  top: 0;
+  canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: $black;
+  }
+}
+
+#setting {
+  height: 40%;
+  bottom: 0;
+  background-color: $mainColor;
+  #label, #visualSource, #soundSource, #controller, #properties {
+    position: absolute;
+    margin: auto;
+  }
+  #label, #visualSource, #soundSource, #controller {
+    width: calc(100vw / 3 * 2);
+    left: 0;
+  }
+  #label, #controller {
+    height: 32px;
+  }
+  #label {
+    top: 0;
+    .button {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      margin: auto;
+      &#visual {
+        left: 0;
+      }
+      &#sound {
+        right: 0;
+      }
+      input, img {
+        position: absolute;
+        margin: auto;
+      }
+      input {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        &:checked + img {
+          opacity: 1;
+          background-color: $subColor;
+        }
+        &:checked ~ #visualSource {
+          display: block;
+        }
+        &:checked ~ #soundSource {
+          display: block;
+        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 0px 0px 16px 16px;
+        opacity: 0.5;
+        transition: background-color 0.3s, opacity 0.3s;
+      }
+      #visualSource, #soundSource {
+        height: calc(40vh - 64px);
+        top: 100%;
+        overflow-y: scroll;
+        display: none;
+        p.noSource {
+          font-size: 24px;
+          margin: 0;
+          text-align: center;
+          line-height: calc(40vh - 64px);
+        }
+        div {
+          width: 100%;
+          height: 32px;
+          overflow: hidden;
+          input {
+            display: none;
+            &:checked + p {
+              background-color: $subColor;
+            }
+          }
+          p {
+            font-size: 14px;
+            line-height: 32px;
+            margin: 0;
+            padding: 0 0 0 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            &:hover {
+              background-color: $subColor;
+            }
+            &:active {
+              background-color: $activeColor;
+            }
+          }
+        }
+      }
+      #soundSource {
+        left: calc(-100vw / 3);
+      }
+    }
+  }
+  #controller {
+    bottom: 0;
+    display: flex;
+    border-radius: 16px 16px 0px 0px;
+    background-color: $subColor;
+    .button {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      &:active {
+        background-color: $activeColor;
+      }
+      img {
+        width: 50%;
+        height: 50%;
+        padding: 25%;
+        object-fit: contain;
+      }
+    }
+    .button:first-child {
+      border-radius: 16px 0px 0px 0px;
+    }
+    .box {
+      height: 32px;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      &.loopBack {
+        width: 250px;
+        right: 110px;
+      }
+      &.pause {
+        width: 80px;
+        right: 0px;
+        .checkbox {
+          margin: 0 8px 0 0;
+        }
+      }
+      p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 32px;
+      }
+      .checkbox {
+        width: 16px;
+        height: 16px;
+        input, div {
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          margin: 0;
+        }
+        input {
+          margin: 0;
+          opacity: 0;
+          z-index: 1;
+          &:checked + div {
+            background-color: $selectedColor;
+          }
+        }
+        div {
+          border-radius: 8px;
+          background-color: $white;
+          transition: background-color 0.3s;
+        }
+      }
+      #rangeSwitch {
+        display: none;
+        &:checked + .range {
+          background-color: $gray;
+        }
+        &:checked + .range .rangeBar {
+          background-color: $gray;
+        }
+        &:checked + .range input {
+          display: none;
+        }
+      }
+      .range {
+        width: 130px;
+        height: 8px;
+        background-color: $white;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        div, input {
+          width: 130px;
+          height: 8px;
+          position: absolute;
+          margin: auto;
+        }
+        div {
+          background-color: $selectedColor;
+          border-radius: 4px;
+          transition: background-color 0.3s;
+        }
+        input {
+          margin: 0;
+          opacity: 0;
+        }
+      }
+    }
+  }
+  #properties {
+    width: calc(100% / 3);
+    height: 100%;
+    right: 0;
+    #label {
+      width: 100%;
+      height: 32px;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      border-radius: 0px 0px 16px 16px;
+      background-color: $subColor;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    #tools {
+      width: 100%;
+      height: calc(100% - 32px);
+      position: absolute;
+      margin: auto;
+      bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      align-content: flex-start;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      #visualSwitch, #soundSwitch {
+        display: none;
+      }
+      #visualSwitch {
+        &:checked ~ #visual #referencePoints {
+          border-color: $gray;
+          div.radio0, div.radio1, div.radio2,
+          div.radio3, div.radio4, div.radio5,
+          div.radio6, div.radio7, div.radio8 {
+            background-color: $gray;
+          }
+          input.radio0, input.radio1, input.radio2,
+          input.radio3, input.radio4, input.radio5,
+          input.radio6, input.radio7, input.radio8 {
+            pointer-events: none;
+          }
+        }
+        &:checked ~ #visual #deformation .box {
+          div, input {
+            background-color: $gray;
+          }
+          input {
+            pointer-events: none;
+            color: $clear;
+          }
+        }
+        &:checked ~ #visual #deformation .aspectRatioLock {
+          cursor: default;
+          div {
+            background-color: $gray;
+          }
+        }
+      }
+      #soundSwitch {
+        &:checked ~ #sound #playAndPause {
+          input {
+            pointer-events: none;
+          }
+          div {
+            background-color: $gray;
+          }
+        }
+        &:checked ~ #sound #muteAndLoop div {
+          .label {
+            background-color: $gray;
+          }
+          .checkbox {
+            input {
+              pointer-events: none;
+            }
+            div {
+              background-color: $gray;
+            }
+          }
+        }
+        &:checked ~ #sound #volume {
+          .label, .range, .range div {
+            background-color: $gray;
+          }
+          .range input {
+            pointer-events: none;
+          }
+          .value p {
+            color: $gray;
+          }
+        }
+      }
+      #visual, #sound {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        align-content: flex-start;
+      }
+      #visual {
+        #referencePoints {
+          width: 48px;
+          height: 48px;
+          position: relative;
+          border-style: solid;
+          border-width: 3px;
+          border-color: $white;
+          margin: 16px;
+          transition: border-color 0.3s;
+          .radio0, .radio1, .radio2, .radio3, .radio4, .radio5, .radio6, .radio7, .radio8 {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            margin: auto;
+            background-color: $white;
+          }
+          input.radio0, input.radio1, input.radio2,
+          input.radio3, input.radio4, input.radio5,
+          input.radio6, input.radio7, input.radio8 {
+            z-index: 1;
+            opacity: 0;
+            cursor: pointer;
+            &:checked + div {
+              background-color: $selectedColor;
+            }
+          }
+          div.radio0, div.radio1, div.radio2,
+          div.radio3, div.radio4, div.radio5,
+          div.radio6, div.radio7, div.radio8 {
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            background-color: $white;
+          }
+          .radio0, .radio1, .radio2 {
+            top: -6px;
+          }
+          .radio3, .radio4, .radio5 {
+            top: 0;
+            bottom: 0;
+          }
+          .radio6, .radio7, .radio8 {
+            bottom: -6px;
+          }
+          .radio0, .radio3, .radio6 {
+            left: -6px;
+          }
+          .radio1, .radio4, .radio7 {
+            left: 0;
+            right: 0;
+          }
+          .radio2, .radio5, .radio8 {
+            right: -6px;
+          }
+        }
+        #deformation {
+          width: 180px;
+          height: 64px;
+          position: relative;
+          display: flex;
+          flex-wrap: wrap;
+          margin: 16px;
+          .box {
+            width: 50%;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            &.x div {
+              -webkit-mask-image: url(../images/properties/visual/x.svg);
+            }
+            &.y div {
+              -webkit-mask-image: url(../images/properties/visual/y.svg);
+            }
+            &.w div {
+              -webkit-mask-image: url(../images/properties/visual/w.svg);
+            }
+            &.h div {
+              -webkit-mask-image: url(../images/properties/visual/h.svg);
+            }
+            div, input {
+              height: 60%;
+              background-color: $white;
+              transition: background-color 0.3s, color 0.3s;
+            }
+            div {
+              width: 30%;
+              -webkit-mask-position: center center;
+              -webkit-mask-repeat: no-repeat;
+              -webkit-mask-size: contain;
+            }
+            input {
+              width: 80%;
+              border: 0;
+              margin: 20% 10%;
+              outline: 0;
+              text-align: right;
+              border-radius: 6px;
+              color: $subColor;
+            }
+            input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: none;
+            }
+          }
+          .aspectRatioLock {
+            width: 40px;
+            height: 16px;
+            position: absolute;
+            margin: auto;
+            left: 18px;
+            right: 0;
+            bottom: -20px;
+            cursor: pointer;
+            input {
+              display: none;
+              &:checked + div {
+                -webkit-mask-image: url(../images/properties/visual/lock.svg);
+              }
+            }
+            div {
+              width: 100%;
+              height: 100%;
+              background-color: $white;
+              transition: background-color 0.3s;
+              -webkit-mask-image: url(../images/properties/visual/unlock.svg);
+              -webkit-mask-position: center center;
+              -webkit-mask-repeat: no-repeat;
+              -webkit-mask-size: contain;
+            }
+          }
+        }
+      }
+      #sound {
+        #playAndPauseSwitch {
+          display: none;
+          &:checked + #playAndPause {
+            input {
+              pointer-events: none;
+            }
+            div {
+              background-color: $gray;
+            }
+          }
+        }
+        #playAndPause {
+          width: 80px;
+          height: 32px;
+          margin: 8px 16px;
+          position: relative;
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          input, .button, .label {
+            position: absolute;
+            margin: auto;
+          }
+          input, .button {
+            width: 20px;
+            height: 20px;
+          }
+          .button, .label {
+            background-color: $white;
+            transition: background-color 0.3s;
+            -webkit-mask-position: center center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+          }
+          input {
+            z-index: 1;
+            opacity: 0;
+            cursor: pointer;
+            &:checked ~ .button {
+              -webkit-mask-image: url(../images/icons/properties/pause.svg);
+            }
+            &:checked ~ .label {
+              -webkit-mask-image: url(../images/properties/sound/pause.svg);
+            }
+          }
+          .button {
+            -webkit-mask-image: url(../images/icons/properties/play.svg);
+          }
+          .label {
+            width: 50px;
+            height: 32px;
+            left: 0;
+            -webkit-mask-image: url(../images/properties/sound/play.svg);
+          }
+        }
+        #loopSwitch {
+          display: none;
+          &:checked + #muteAndLoop .loop {
+            .label {
+              background-color: $gray;
+            }
+            .checkbox {
+              input {
+                pointer-events: none;
+              }
+              div {
+                background-color: $gray;
+              }
+            }
+          }
+        }
+        #muteAndLoop {
+          width: 160px;
+          height: 32px;
+          margin: 8px 16px;
+          display: flex;
+          justify-content: space-between;
+          .mute, .loop {
+            width: 45%;
+            height: 100%;
+            display: flex;
+            .label {
+              width: 50%;
+              height: 100%;
+              background-color: $white;
+              transition: background-color 0.3s;
+              -webkit-mask-position: center center;
+              -webkit-mask-repeat: no-repeat;
+              -webkit-mask-size: contain;
+            }
+            .checkbox {
+              width: 50%;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              div, input {
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                margin: auto;
+              }
+              div {
+                border-radius: 8px;
+                background-color: $white;
+                transition: background-color 0.3s;
+              }
+              input {
+                margin: 0;
+                cursor: pointer;
+                opacity: 0;
+                z-index: 1;
+                &:checked + div {
+                  background-color: $selectedColor;
+                }
+              }
+            }
+          }
+          .mute .label {
+            -webkit-mask-image: url(../images/properties/sound/mute.svg);
+          }
+          .loop .label {
+            -webkit-mask-image: url(../images/properties/sound/loop.svg);
+          }
+        }
+        #volume {
+          width: 300px;
+          height: 32px;
+          margin: 8px 16px;
+          display: flex;
+          align-items: center;
+          .label, .value {
+            height: 100%;
+          }
+          .label {
+            width: 20%;
+            background-color: $white;
+            transition: background-color 0.3s;
+            -webkit-mask-image: url(../images/properties/sound/volume.svg);
+            -webkit-mask-position: center center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+          }
+          .range {
+            width: 60%;
+            height: 25%;
+            position: relative;
+            margin: 0 2.5%;
+            border-radius: 5px;
+            background-color: $white;
+            transition: background-color 0.3s;
+            div, input {
+              height: 100%;
+              position: absolute;
+              margin: auto;
+            }
+            div {
+              width: 0%;
+              border-radius: 5px;
+              background-color: $selectedColor;
+              transition: background-color 0.3s;
+            }
+            input {
+              width: 100%;
+              cursor: pointer;
+              opacity: 0;
+            }
+          }
+          .value {
+            width: 15%;
+            p {
+              font-size: 14px;
+              text-align: center;
+              margin: 0;
+              line-height: 32px;
+              transition: color 0.3s;
+            }
+          }
+        }
+      }
+      #other {
+        #gateSwitch {
+          display: none;
+          &:checked + #gate {
+            .label {
+              background-color: $gray;
+            }
+            .range {
+              background-color: $gray;
+              .gateBar {
+                background-color: $gray;
+              }
+              .volumeBar {
+                background-color: $gray;
+              }
+            }
+            .value p {
+              color: $gray;
+            }
+          }
+        }
+        #gate {
+          width: 300px;
+          height: 32px;
+          margin: 8px 16px;
+          display: flex;
+          align-items: center;
+          .label, .value {
+            height: 100%;
+          }
+          .label {
+            width: 20%;
+            background-color: $white;
+            transition: background-color 0.3s;
+            -webkit-mask-image: url(../images/properties/sound/gate.svg);
+            -webkit-mask-position: center center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+          }
+          .range {
+            width: 60%;
+            height: 25%;
+            position: relative;
+            margin: 0 2.5%;
+            border-radius: 5px;
+            background-color: $white;
+            transition: background-color 0.3s;
+            div, input {
+              height: 100%;
+              position: absolute;
+              margin: auto;
+            }
+            div {
+              width: 0%;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              &.gateBar {
+                background-color: $selectedColor;
+              }
+              &.volumeBar {
+                background-color: $orange;
+                opacity: 0.5;
+              }
+            }
+            input {
+              width: 100%;
+              cursor: pointer;
+              opacity: 0;
+            }
+          }
+          .value {
+            width: 15%;
+            p {
+              font-size: 14px;
+              text-align: center;
+              margin: 0;
+              line-height: 32px;
+              transition: color 0.3s;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#visualSourceType, #soundSourceType {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  margin: auto;
+  z-index: 2;
+  display: none;
+  .list {
+    width: 180px;
+    height: auto;
+    position: absolute;
+    margin: auto;
+    left: 0px;
+    bottom: 32px;
+    border-radius: 16px;
+    background-color: $subColor;
+    p {
+      font-size: 14px;
+      margin: 0;
+      padding: 8px;
+      cursor: pointer;
+      &:hover {
+        background-color: $activeColor;
+      }
+      &:first-child {
+        border-radius: 16px 16px 0px 0px;
+      }
+      &:last-child {
+        border-radius: 0px 0px 16px 16px;
+      }
+    }
+  }
+}
+
+#customAlertCheckbox {
+  display: none;
+  &:checked + #customAlert {
+    top: 0;
+    filter: drop-shadow(0 0 32px $black);
+  }
+}
+
+#customAlert {
+  width: 380px;
+  height: 240px;
+  position: absolute;
+  margin: auto;
+  top: -240px;
+  left: 0;
+  right: 0;
+  transition: top 0.3s, filter 0.3s;
+  border-radius: 0 0 16px 16px;
+  background-color: $mainColor;
+  overflow: hidden;
+  .title {
+    font-size: 20px;
+    margin: 0;
+    padding: 16px 24px;
+    color: $white;
+    white-space: nowrap;
+  }
+  .detail {
+    width: 340px;
+    height: 130px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 54px;
+    overflow: hidden;
+    color: $white;
+    font-size: 16px;
+    p {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+    .list {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      margin: auto;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      input {
+        display: none;
+        &:checked + p {
+          background-color: $subColor;
+        }
+      }
+      p {
+        margin: 0;
+        padding: 4px 8px;
+        border-radius: 16px;
+        white-space: nowrap;
+        cursor: pointer;
+        &:active {
+          background-color: $activeColor;
+        }
+      }
+    }
+  }
+  .button {
+    width: 120px;
+    height: 30px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    border-radius: 15px;
+    background-color: $subColor;
+    &:active {
+      background-color: $activeColor;
+    }
+    p {
+      font-size: 14px;
+      line-height: 30px;
+      text-align: center;
+      margin: 0;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,185 @@
+$mainColor: #555555;
+$subColor: #353535;
+$activeColor: #252525;
+$selectedColor: #2CA9E1;
+$white: #DDDDDD;
+$black: #000000;
+$gray: #888888;
+$clear: rgba(0, 0, 0, 0);
+$orange: #FF8300;
+
+body {
+  margin: 0;
+  user-select: none;
+}
+
+img {
+  pointer-events: none;
+}
+
+p {
+  color: $white;
+}
+
+p, h1, input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.box {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $mainColor;
+  .box {
+    width: 940px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    div {
+      height: 64px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      .label, .value {
+        font-size: 14px;
+        text-align: center;
+        width: 140px;
+      }
+      .rangeBack, .range, input {
+        width: 600px;
+      }
+      .rangeBack, .range {
+        height: 8px;
+        position: absolute;
+        margin: auto;
+        left: 140px;
+        border-radius: 4px;
+      }
+      .rangeBack {
+        background-color: $white;
+      }
+      .range {
+        background-color: $selectedColor;
+      }
+      input {
+        margin: 0;
+        opacity: 0;
+      }
+    }
+    .buttons {
+      div {
+        width: 56px;
+        height: 56px;
+        margin: 0px 32px;
+        border-radius: 28px;
+        background-color: $subColor;
+        &:active {
+          background-color: $activeColor;
+        }
+        img {
+          width: 24px;
+          height: 24px;
+          position: absolute;
+          margin: auto;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+#customAlertCheckbox {
+  display: none;
+  &:checked + #customAlert {
+    top: 0;
+    filter: drop-shadow(0 0 32px $black);
+  }
+}
+
+#customAlert {
+  width: 380px;
+  height: 240px;
+  position: absolute;
+  margin: auto;
+  top: -240px;
+  left: 0;
+  right: 0;
+  transition: top 0.3s, filter 0.3s;
+  border-radius: 0 0 16px 16px;
+  background-color: $mainColor;
+  overflow: hidden;
+  .title {
+    font-size: 20px;
+    margin: 0;
+    padding: 16px 24px;
+    color: $white;
+    white-space: nowrap;
+  }
+  .detail {
+    width: 340px;
+    height: 130px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 54px;
+    overflow: hidden;
+    color: $white;
+    font-size: 16px;
+    p {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+    .list {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      margin: auto;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      input {
+        display: none;
+        &:checked + p {
+          background-color: $subColor;
+        }
+      }
+      p {
+        margin: 0;
+        padding: 4px 8px;
+        border-radius: 16px;
+        white-space: nowrap;
+        cursor: pointer;
+        &:active {
+          background-color: $activeColor;
+        }
+      }
+    }
+  }
+  .button {
+    width: 120px;
+    height: 30px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    border-radius: 15px;
+    background-color: $subColor;
+    &:active {
+      background-color: $activeColor;
+    }
+    p {
+      font-size: 14px;
+      line-height: 30px;
+      text-align: center;
+      margin: 0;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  }
+}

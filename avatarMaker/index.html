@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <title>Avatar Maker | Alice Live!</title>
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <!-- css -->
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- js (application) -->
+  <script src="./js/common.js"></script>
+  <script src="./js/customAlert.js"></script>
+  <script src="./js/source.js"></script>
+  <script src="./js/canvas.js"></script>
+  <script src="./js/sourceManager.js"></script>
+  <script src="./js/unloadBlocker.js"></script>
+</head>
+<body>
+  <!-- label -->
+  <div id="label">
+    <p>File Name</p>
+    <div class="box">
+      <p>Left</p>
+      <p>Right</p>
+      <p>Top</p>
+      <p>Bottom</p>
+      <p class="long">Open Eye</p>
+      <p class="long">CLosed Eye</p>
+      <p class="long">Open Mouth</p>
+      <p class="long">Closed Mouth</p>
+    </div>
+  </div>
+  <!-- editor -->
+  <div id="editor">
+    <p class="noImage">No Image</p>
+  </div>
+  <!-- controller -->
+  <div id="controller">
+    <div class="button add">
+      <img src="./images/add.svg">
+    </div>
+    <div class="button remove">
+      <img src="./images/remove.svg">
+    </div>
+    <div class="button up">
+      <img src="./images/up.svg">
+    </div>
+    <div class="button down">
+      <img src="./images/down.svg">
+    </div>
+    <div class="button save">
+      <img src="./images/save.svg">
+    </div>
+    <div class="button load">
+      <img src="./images/load.svg">
+    </div>
+    <div class="box">
+      <p>Canvas Size:</p>
+      <p>Width</p>
+      <input class="width" type="number">
+      <p>Height</p>
+      <input class="height" type="number">
+    </div>
+  </div>
+  <!-- preview -->
+  <div id="preview">
+    <canvas width="1000" height="1000"></canvas>
+  </div>
+  <!-- custom alert -->
+  <input id="customAlertCheckbox" type="checkbox">
+  <div id="customAlert">
+    <h1 class="title"></h1>
+    <div class="detail"></div>
+    <div class="button">
+      <p>OK</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+$mainColor: #555555;
+$subColor: #353535;
+$activeColor: #252525;
+$selectedColor: #2CA9E1;
+$white: #DDDDDD;
+$black: #000000;
+$gray: #888888;
+$clear: rgba(0, 0, 0, 0);
+$orange: #FF8300;
+
+body {
+  margin: 0;
+  user-select: none;
+  background-color: $mainColor;
+}
+
+p, h1, input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+p {
+  width: 800px;
+  font-size: 14px;
+  color: $white;
+  margin: 4px 0;
+  text-align: center;
+  transform: translateX(calc(50vw - 800px / 2));
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  border: none;
+  border-radius: 2.5px;
+  background-color: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2.5px;
+  background-color: $subColor;
+}

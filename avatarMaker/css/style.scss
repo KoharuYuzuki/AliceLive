@@ -1,0 +1,341 @@
+$mainColor: #555555;
+$subColor: #353535;
+$activeColor: #252525;
+$selectedColor: #2CA9E1;
+$white: #DDDDDD;
+$black: #000000;
+$gray: #888888;
+$clear: rgba(0, 0, 0, 0);
+$orange: #FF8300;
+
+body {
+  margin: 0;
+  user-select: none;
+  background-color: $mainColor;
+}
+
+img {
+  pointer-events: none;
+}
+
+p {
+  color: $white;
+}
+
+p, h1, input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  border: none;
+  border-radius: 2.5px;
+  background-color: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2.5px;
+  background-color: $subColor;
+}
+
+#label, #editor, #controller, #preview {
+  width: 50vw;
+  position: absolute;
+  margin: auto;
+}
+
+#label, #editor, #controller {
+  max-width: 700px;
+}
+
+#label {
+  height: 32px;
+  top: 0;
+  left: 0;
+  border-radius: 0px 0px 16px 16px;
+  background-color: $subColor;
+  display: flex;
+  justify-content: space-between;
+  p {
+    margin: 0 8px;
+    font-size: 14px;
+    line-height: 32px;
+  }
+  .box {
+    width: 480px;
+    height: 32px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 5px;
+    display: flex;
+    justify-content: space-between;
+    p {
+      width: 48px;
+      margin: 0 4px;
+      text-align: center;
+      &.long {
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+  }
+}
+
+#editor {
+  height: calc(100% - 64px);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  p.noImage {
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    line-height: calc(100vh - 64px);
+  }
+  div {
+    width: 100%;
+    height: 32px;
+    overflow: hidden;
+    input[type="radio"] {
+      display: none;
+      &:checked + p {
+        background-color: $subColor;
+      }
+    }
+    p {
+      width: calc(100% - 8px);
+      position: absolute;
+      margin: 0;
+      font-size: 14px;
+      line-height: 32px;
+      padding: 0 0 0 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      &:hover {
+        background-color: $subColor;
+      }
+      &:active {
+        background-color: $activeColor;
+      }
+    }
+    div {
+      width: 480px;
+      height: 32px;
+      position: absolute;
+      margin: auto;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      input[type="number"] {
+        width: 48px;
+        height: 24px;
+        margin: 4px;
+        padding: 0;
+        border: none;
+        border-radius: 16px;
+        text-align: center;
+        background-color: $white;
+        &:focus {
+          outline: none;
+        }
+      }
+      input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: none;
+      }
+      div {
+        width: 16px;
+        height: 16px;
+        margin: 8px 20px;
+        position: relative;
+        display: block;
+        input {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          margin: auto;
+          opacity: 0;
+          z-index: 1;
+          &:checked + div {
+            background-color: $selectedColor;
+          }
+        }
+        div {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          margin: auto;
+          top: 0;
+          border-radius: 8px;
+          background-color: $white;
+          transition: background-color 0.3s;
+        }
+      }
+    }
+  }
+}
+
+#controller {
+  height: 32px;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  border-radius: 16px 16px 0px 0px;
+  background-color: $subColor;
+  .button {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    &:active {
+      background-color: $activeColor;
+    }
+    img {
+      width: 50%;
+      height: 50%;
+      padding: 25%;
+      object-fit: contain;
+    }
+  }
+  .button:first-child {
+    border-radius: 16px 0px 0px 0px;
+  }
+  .box {
+    width: 320px;
+    height: 32px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 32px;
+    }
+    input {
+      width: 48px;
+      height: 24px;
+      margin: 4px 0;
+      padding: 0;
+      border: none;
+      border-radius: 16px;
+      text-align: center;
+      &:focus {
+        outline: none;
+      }
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: none;
+    }
+  }
+}
+
+#preview {
+  min-width: calc(100vw - 700px);
+  height: 100vh;
+  right: 0;
+  canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: $black;
+  }
+}
+
+#customAlertCheckbox {
+  display: none;
+  &:checked + #customAlert {
+    top: 0;
+    filter: drop-shadow(0 0 32px $black);
+  }
+}
+
+#customAlert {
+  width: 380px;
+  height: 240px;
+  position: absolute;
+  margin: auto;
+  top: -240px;
+  left: 0;
+  right: 0;
+  transition: top 0.3s, filter 0.3s;
+  border-radius: 0 0 16px 16px;
+  background-color: $mainColor;
+  overflow: hidden;
+  .title {
+    font-size: 20px;
+    margin: 0;
+    padding: 16px 24px;
+    color: $white;
+    white-space: nowrap;
+  }
+  .detail {
+    width: 340px;
+    height: 130px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 54px;
+    overflow: hidden;
+    color: $white;
+    font-size: 16px;
+    p {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+    .list {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      margin: auto;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      input {
+        display: none;
+        &:checked + p {
+          background-color: $subColor;
+        }
+      }
+      p {
+        margin: 0;
+        padding: 4px 8px;
+        border-radius: 16px;
+        white-space: nowrap;
+        cursor: pointer;
+        &:active {
+          background-color: $activeColor;
+        }
+      }
+    }
+  }
+  .button {
+    width: 120px;
+    height: 30px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    border-radius: 15px;
+    background-color: $subColor;
+    &:active {
+      background-color: $activeColor;
+    }
+    p {
+      font-size: 14px;
+      line-height: 30px;
+      text-align: center;
+      margin: 0;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  }
+}

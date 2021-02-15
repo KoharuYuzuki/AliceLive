@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Alice Live!",
+  "version": "1.0.0",
+  "description": "アバターを使用したYouTubeライブ配信ができる拡張機能です",
+  "icons": {
+    "128": "icon.png"
+  },
+  "action": {},
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://studio.youtube.com/*/livestreaming*"
+      ],
+      "js": [
+        "contentScript/loader.js",
+        "contentScript/webRTC.js",
+        "contentScript/invert.js",
+        "contentScript/comment.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "tabs",
+    "contextMenus"
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "LICENSE",
+      "contentScript/hook.js",
+      "contentScript/keyframe.css"
+    ],
+    "matches": [],
+    "extension_ids": []
+  }]
+}

@@ -1,0 +1,197 @@
+body {
+  margin: 0;
+  user-select: none;
+}
+
+img {
+  pointer-events: none;
+}
+
+p {
+  color: #DDDDDD;
+}
+
+p, h1, input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.box {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #555555;
+}
+
+.box .box {
+  width: 940px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.box .box div {
+  height: 64px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.box .box div .label, .box .box div .value {
+  font-size: 14px;
+  text-align: center;
+  width: 140px;
+}
+
+.box .box div .rangeBack, .box .box div .range, .box .box div input {
+  width: 600px;
+}
+
+.box .box div .rangeBack, .box .box div .range {
+  height: 8px;
+  position: absolute;
+  margin: auto;
+  left: 140px;
+  border-radius: 4px;
+}
+
+.box .box div .rangeBack {
+  background-color: #DDDDDD;
+}
+
+.box .box div .range {
+  background-color: #2CA9E1;
+}
+
+.box .box div input {
+  margin: 0;
+  opacity: 0;
+}
+
+.box .box .buttons div {
+  width: 56px;
+  height: 56px;
+  margin: 0px 32px;
+  border-radius: 28px;
+  background-color: #353535;
+}
+
+.box .box .buttons div:active {
+  background-color: #252525;
+}
+
+.box .box .buttons div img {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#customAlertCheckbox {
+  display: none;
+}
+
+#customAlertCheckbox:checked + #customAlert {
+  top: 0;
+  filter: drop-shadow(0 0 32px #000000);
+}
+
+#customAlert {
+  width: 380px;
+  height: 240px;
+  position: absolute;
+  margin: auto;
+  top: -240px;
+  left: 0;
+  right: 0;
+  transition: top 0.3s, filter 0.3s;
+  border-radius: 0 0 16px 16px;
+  background-color: #555555;
+  overflow: hidden;
+}
+
+#customAlert .title {
+  font-size: 20px;
+  margin: 0;
+  padding: 16px 24px;
+  color: #DDDDDD;
+  white-space: nowrap;
+}
+
+#customAlert .detail {
+  width: 340px;
+  height: 130px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 54px;
+  overflow: hidden;
+  color: #DDDDDD;
+  font-size: 16px;
+}
+
+#customAlert .detail p {
+  font-size: 16px;
+  margin: 6px 0;
+}
+
+#customAlert .detail .list {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#customAlert .detail .list input {
+  display: none;
+}
+
+#customAlert .detail .list input:checked + p {
+  background-color: #353535;
+}
+
+#customAlert .detail .list p {
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#customAlert .detail .list p:active {
+  background-color: #252525;
+}
+
+#customAlert .button {
+  width: 120px;
+  height: 30px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  border-radius: 15px;
+  background-color: #353535;
+}
+
+#customAlert .button:active {
+  background-color: #252525;
+}
+
+#customAlert .button p {
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+  margin: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+/*# sourceMappingURL=style.css.map */

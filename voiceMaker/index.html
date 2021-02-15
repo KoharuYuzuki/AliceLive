@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <title>Voice Maker | Alice Live!</title>
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <!-- css -->
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- js (library) -->
+  <script src="./js/lib/tonejs/Tone_v14.7.39.js"></script>
+  <!-- js (application) -->
+  <script src="./js/customAlert.js"></script>
+  <script src="./js/voiceChanger.js"></script>
+  <script src="./js/unloadBlocker.js"></script>
+</head>
+<body>
+  <div class="box">
+    <div class="box">
+      <div>
+        <p class="label">Pitch Shifter</p>
+        <div class="rangeBack"></div>
+        <div class="range"></div>
+        <input id="pitch" type="range" min="-1" max="1" step="0.01" value="0">
+        <p class="value"></p>
+      </div>
+      <div>
+        <p class="label">Frequency Shifter</p>
+        <div class="rangeBack"></div>
+        <div class="range"></div>
+        <input id="frequency" type="range" min="-100" max="100" step="1" value="0">
+        <p class="value"></p>
+      </div>
+      <div>
+        <p class="label">High-Pass Filter</p>
+        <div class="rangeBack"></div>
+        <div class="range"></div>
+        <input id="highpass" type="range" min="0" max="1000" step="1" value="0">
+        <p class="value"></p>
+      </div>
+      <div>
+        <p class="label">Low-Pass Filter</p>
+        <div class="rangeBack"></div>
+        <div class="range"></div>
+        <input id="lowpass" type="range" min="2000" max="10000" step="1" value="10000">
+        <p class="value"></p>
+      </div>
+      <div>
+        <p class="label">Volume</p>
+        <div class="rangeBack"></div>
+        <div class="range"></div>
+        <input id="volume" type="range" min="0" max="200" step="1" value="100">
+        <p class="value"></p>
+      </div>
+      <div class="buttons">
+        <div id="save">
+          <img src="./images/save.svg">
+        </div>
+        <div id="load">
+          <img src="./images/load.svg">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- custom alert -->
+  <input id="customAlertCheckbox" type="checkbox">
+  <div id="customAlert">
+    <h1 class="title"></h1>
+    <div class="detail"></div>
+    <div class="button">
+      <p>OK</p>
+    </div>
+  </div>
+</body>
+</html>

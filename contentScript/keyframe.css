@@ -1,0 +1,5 @@
+@keyframes previewDetection {}
+
+video#preview {
+  animation: previewDetection;
+}
