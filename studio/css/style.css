@@ -208,6 +208,11 @@ p, h1, input {
   align-items: center;
 }
 
+#setting #controller .box.fullscreen {
+  width: 100px;
+  right: 390px;
+}
+
 #setting #controller .box.loopBack {
   width: 250px;
   right: 110px;
