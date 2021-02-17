@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Alice Live!",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "アバターを使用したYouTubeライブ配信ができる拡張機能です",
   "icons": {
     "128": "icon.png"
