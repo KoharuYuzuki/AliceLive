@@ -85,7 +85,7 @@
       {id: 'studio',  title: 'Studio'},
       {id: 'avatar',  title: 'Avatar Maker'},
       {id: 'voice',   title: 'Voice Maker'},
-      {id: 'license', title: 'LICENSE'}
+      {id: 'license', title: 'License'}
     ]);
   });
 
