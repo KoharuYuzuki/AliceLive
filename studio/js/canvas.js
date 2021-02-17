@@ -154,6 +154,7 @@
 
     const opacity = source.getFrameOpacity();
     if (opacity > 0) {
+      backCanvasCtx.lineWidth = 1;
       backCanvasCtx.strokeStyle = `rgba(25, 25, 25, ${opacity})`;
       backCanvasCtx.strokeRect(viewer.x, viewer.y, viewer.width, viewer.height);
       const num = opacity - 0.01;
@@ -161,8 +162,11 @@
       else source.setFrameOpacity(0);
     }
 
-    backCanvasCtx.font = '28px \'Noto Sans JP\'';
-    backCanvasCtx.fillStyle = '#252525';
+    backCanvasCtx.lineWidth = 6;
+    backCanvasCtx.lineJoin = 'round';
+    backCanvasCtx.font = '21px \'Noto Sans JP\', \'sans-serif\'';
+    backCanvasCtx.strokeStyle = '#252525';
+    backCanvasCtx.fillStyle = '#FFFFFF';
 
     const uuids = [...commentUUIDs].reverse();
     let lineCounter = 0;
@@ -196,13 +200,18 @@
       commentSplit.reverse();
       for (let i = 0; i < commentSplit.length; i++) {
         const str = commentSplit[i];
+        backCanvasCtx.strokeText(
+          str,
+          viewer.x,
+          viewer.height - (lineCounter * (21 + 4)) + viewer.y
+        );
         backCanvasCtx.fillText(
           str,
           viewer.x,
-          viewer.height - (lineCounter * (32)) + viewer.y
+          viewer.height - (lineCounter * (21 + 4)) + viewer.y
         );
         lineCounter++;
-        if (((lineCounter + 1) * 32) > viewer.height) {
+        if (((lineCounter + 1) * (21 + 4)) > viewer.height) {
           breakFlag = true;
           break;
         }
