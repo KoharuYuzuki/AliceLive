@@ -13,7 +13,7 @@
         uuid: genUniqueUUID()
       });
 
-      if (['avatar', 'picture', 'capture', 'comment'].includes(_this.type)) {
+      if (['avatar', 'picture', 'capture', 'comment', 'whiteboard'].includes(_this.type)) {
         _this.setReferencePoint(0);
         _this.deformation = {};
       }
@@ -145,6 +145,15 @@
         _this.setFrameOpacity(1);
         setReadOnlyProperties(_this, {
           displayName: 'Comment Viewer'
+        });
+      }
+      if (_this.type === 'whiteboard') {
+        _this.setDeformationAll(0, 0, 500, 500);
+        _this.setFrameOpacity(1);
+        const canvas = document.createElement('canvas');
+        setReadOnlyProperties(_this, {
+          displayName: 'Whiteboard',
+          canvas
         });
       }
       if (_this.type === 'voiceChanger') {
@@ -294,6 +303,9 @@
     },
     getFrameOpacity: function () {
       return this.frameOpacity;
+    },
+    getCanvas: function () {
+      return this.canvas;
     },
     setReferencePoint: function (referencePoint) {
       this.referencePoint = referencePoint;

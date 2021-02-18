@@ -108,7 +108,7 @@
             break;
         }
         setDeformation();
-        if (source.getType() === 'comment') source.setFrameOpacity(1);
+        if (['comment', 'whiteboard'].includes(source.getType())) source.setFrameOpacity(1);
       }, false);
     });
 
@@ -216,7 +216,7 @@
       displayGateSwitch(true);
     }
 
-    if (['picture', 'comment'].includes(type)) {
+    if (['picture', 'comment', 'whiteboard'].includes(type)) {
       displayVisualSwitch(false);
       displaySoundSwitch(true);
     }
@@ -234,7 +234,7 @@
         displaySoundSwitch(true);
       }
     }
-    if (['avatar', 'picture', 'capture', 'comment'].includes(type)) {
+    if (['avatar', 'picture', 'capture', 'comment', 'whiteboard'].includes(type)) {
       setReferencePoint();
       setDeformation();
     }

@@ -28,10 +28,11 @@
     });
 
     visualTypes = getElements({
-      avatar:  '#visualSourceType .list #avatar',
-      picture: '#visualSourceType .list #picture',
-      capture: '#visualSourceType .list #capture',
-      comment: '#visualSourceType .list #comment',
+      avatar:     '#visualSourceType .list #avatar',
+      picture:    '#visualSourceType .list #picture',
+      capture:    '#visualSourceType .list #capture',
+      comment:    '#visualSourceType .list #comment',
+      whiteboard: '#visualSourceType .list #whiteboard',
     });
 
     soundTypes = getElements({
@@ -78,6 +79,7 @@
     }, false);
     visualTypes.capture.addEventListener('mouseup', addScreenCapture, false);
     visualTypes.comment.addEventListener('mouseup', addCommentViewer, false);
+    visualTypes.whiteboard.addEventListener('mouseup', addWhiteboard, false);
 
     soundTypes.voiceChanger.addEventListener('mouseup', () => {
       loadFiles('sound', 'voiceChanger', ['.json']);
@@ -366,6 +368,15 @@
 
   function addCommentViewer () {
     new Source('Comment Viewer', 'comment')
+    .then((source) => {
+      sources.visual.unshift(source);
+      updateList('visual');
+    })
+    .catch((e) => console.error(e));
+  }
+
+  function addWhiteboard () {
+    new Source('Whiteboard', 'whiteboard')
     .then((source) => {
       sources.visual.unshift(source);
       updateList('visual');

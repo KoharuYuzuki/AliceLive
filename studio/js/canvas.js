@@ -2,16 +2,19 @@
 
 (() => {
 
+  const uuids = [];
   let canvas, canvasCtx, backCanvas, backCanvasCtx, drawSkip = false;
 
   addEventListener('load', () => {
     canvas = document.querySelector('canvas');
     window.videoTrack = canvas.captureStream(60).getVideoTracks()[0];
     canvasCtx = canvas.getContext('2d');
+
     backCanvas = document.createElement('canvas');
     backCanvas.width = canvas.width;
     backCanvas.height = canvas.height;
     backCanvasCtx = backCanvas.getContext('2d');
+
     setInterval(draw, 1000 / 60);
 
     document.querySelector('.pause .checkbox input').addEventListener('change', (event) => {
@@ -21,6 +24,52 @@
         drawSkip = false;
       }
     }, false);
+  }, false);
+
+  addEventListener('updatedList', () => {
+    sources.visual.forEach((source) => {
+      if (uuids.includes(source.getUUID())) return;
+      if (source.getType() !== 'whiteboard') return;
+
+      const undoStack = [];
+      const whiteboard = source.getCanvas();
+      const whiteboardCtx = whiteboard.getContext('2d');
+      let x, y, draw = false;
+
+      canvas.addEventListener('mousedown', (event) => {
+        if (event.button === 0) {
+          const image = whiteboardCtx.getImageData(
+            0, 0, whiteboard.width, whiteboard.height
+          );
+          undoStack.push(image);
+          const result = calcCoordinates(event);
+          x = result.x;
+          y = result.y;
+          draw = true;
+        } else if (event.button === 2) {
+          if (undoStack.length <= 0) return;
+          const image = undoStack.pop();
+          whiteboardCtx.putImageData(image, 0, 0);
+        }
+      }, false);
+
+      canvas.addEventListener('mousemove', (event) => {
+        if (!draw) return;
+        const result = calcCoordinates(event);
+        drawLine(whiteboardCtx, x, y, result.x, result.y);
+        x = result.x;
+        y = result.y;
+      }, false);
+
+      canvas.addEventListener('mouseup', (event) => {
+        if (!draw) return;
+        const result = calcCoordinates(event);
+        drawLine(whiteboardCtx, x, y, result.x, result.y);
+        draw = false;
+      }, false);
+
+      uuids.push(source.getUUID());
+    });
   }, false);
 
   function draw () {
@@ -47,6 +96,9 @@
       }
       if (type === 'comment') {
         drawComments(source);
+      }
+      if (type === 'whiteboard') {
+        drawWhiteboard(source);
       }
     }
 
@@ -223,6 +275,51 @@
     }
 
     backCanvasCtx.fill();
+  }
+
+  function drawWhiteboard (source) {
+    const deformation = source.getDeformation();
+
+    backCanvasCtx.fillStyle = '#FFFFFF';
+    backCanvasCtx.fillRect(deformation.x, deformation.y, deformation.w, deformation.h);
+
+    const opacity = source.getFrameOpacity();
+    if (opacity > 0) {
+      backCanvasCtx.lineWidth = 1;
+      backCanvasCtx.strokeStyle = `rgba(25, 25, 25, ${opacity})`;
+      backCanvasCtx.strokeRect(deformation.x, deformation.y, deformation.w, deformation.h);
+      const num = opacity - 0.01;
+      if (num > 0) source.setFrameOpacity(num);
+      else source.setFrameOpacity(0);
+    }
+
+    const whiteboard = source.getCanvas();
+    const whiteboardCtx = whiteboard.getContext('2d');
+    const image = whiteboardCtx.getImageData(0, 0, whiteboard.width, whiteboard.height);
+    whiteboard.width = deformation.w;
+    whiteboard.height = deformation.h;
+    whiteboardCtx.putImageData(image, 0, 0);
+
+    backCanvasCtx.drawImage(whiteboard, 0, 0, whiteboard.width, whiteboard.height);
+  }
+
+  function calcCoordinates (event) {
+    const style = getComputedStyle(canvas);
+    const width = Number(style.width.replace('px', ''));
+    const height = Number(style.height.replace('px', ''));
+    const x = event.offsetX / width * canvas.width;
+    const y = event.offsetY / height * canvas.height;
+    return {x, y};
+  }
+
+  function drawLine (context, x1, y1, x2, y2) {
+    context.beginPath();
+    context.strokeStyle = '#252525';
+    context.lineWidth = 1;
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
+    context.closePath();
   }
 
   function copyCanvas () {
