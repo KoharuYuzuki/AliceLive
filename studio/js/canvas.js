@@ -55,16 +55,28 @@
 
       canvas.addEventListener('mousemove', (event) => {
         if (!draw) return;
+        const deformation = source.getDeformation();
         const result = calcCoordinates(event);
-        drawLine(whiteboardCtx, x, y, result.x, result.y);
+        drawLine(
+          whiteboardCtx,
+          deformation.x, deformation.y,
+          x, y,
+          result.x, result.y
+        );
         x = result.x;
         y = result.y;
       }, false);
 
       canvas.addEventListener('mouseup', (event) => {
         if (!draw) return;
+        const deformation = source.getDeformation();
         const result = calcCoordinates(event);
-        drawLine(whiteboardCtx, x, y, result.x, result.y);
+        drawLine(
+          whiteboardCtx,
+          deformation.x, deformation.y,
+          x, y,
+          result.x, result.y
+        );
         draw = false;
       }, false);
 
@@ -295,7 +307,11 @@
     whiteboard.height = deformation.h;
     whiteboardCtx.putImageData(image, 0, 0);
 
-    backCanvasCtx.drawImage(whiteboard, 0, 0, whiteboard.width, whiteboard.height);
+    backCanvasCtx.drawImage(
+      whiteboard,
+      deformation.x, deformation.y,
+      whiteboard.width, whiteboard.height
+    );
   }
 
   function calcCoordinates (event) {
@@ -307,12 +323,12 @@
     return {x, y};
   }
 
-  function drawLine (context, x1, y1, x2, y2) {
+  function drawLine (context, offsetX, offsetY, x1, y1, x2, y2) {
     context.beginPath();
     context.strokeStyle = '#252525';
     context.lineWidth = 1;
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
+    context.moveTo(x1 - offsetX, y1 - offsetY);
+    context.lineTo(x2 - offsetX, y2 - offsetY);
     context.stroke();
     context.closePath();
   }
