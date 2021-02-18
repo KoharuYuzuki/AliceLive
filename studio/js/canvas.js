@@ -195,12 +195,7 @@
   }
 
   function drawComments (source) {
-    const viewer = {
-      x: source.deformation.x,
-      y: source.deformation.y,
-      width: source.deformation.w,
-      height: source.deformation.h
-    };
+    const deformation = source.getDeformation();
 
     backCanvasCtx.beginPath();
 
@@ -208,7 +203,7 @@
     if (opacity > 0) {
       backCanvasCtx.lineWidth = 1;
       backCanvasCtx.strokeStyle = `rgba(25, 25, 25, ${opacity})`;
-      backCanvasCtx.strokeRect(viewer.x, viewer.y, viewer.width, viewer.height);
+      backCanvasCtx.strokeRect(deformation.x, deformation.y, deformation.w, deformation.h);
       const num = opacity - 0.01;
       if (num > 0) source.setFrameOpacity(num);
       else source.setFrameOpacity(0);
@@ -225,7 +220,7 @@
 
     for (let i = 0; i < uuids.length; i++) {
       const uuid = uuids[i];
-      const str = `${comments[uuid].name}: ${comments[uuid].comment}`;
+      const str = `${comments[uuid].name} : ${comments[uuid].comment}`;
       const commentSplit = [];
 
       let loopFlag = true;
@@ -234,7 +229,7 @@
       let length = 1;
       while (loopFlag) {
         const width = backCanvasCtx.measureText(str.substring(begin, length + begin)).width;
-        if (width >= viewer.width) {
+        if (width >= deformation.w) {
           commentSplit.push(str.substring(begin, (length - 1) + begin));
           begin = allLength - 1;
           length = 1;
@@ -254,16 +249,16 @@
         const str = commentSplit[i];
         backCanvasCtx.strokeText(
           str,
-          viewer.x,
-          viewer.height - (lineCounter * (21 + 4)) + viewer.y
+          deformation.x,
+          deformation.h - (lineCounter * (21 + 4)) + deformation.y
         );
         backCanvasCtx.fillText(
           str,
-          viewer.x,
-          viewer.height - (lineCounter * (21 + 4)) + viewer.y
+          deformation.x,
+          deformation.h - (lineCounter * (21 + 4)) + deformation.y
         );
         lineCounter++;
-        if (((lineCounter + 1) * (21 + 4)) > viewer.height) {
+        if (((lineCounter + 1) * (21 + 4)) > deformation.h) {
           breakFlag = true;
           break;
         }
