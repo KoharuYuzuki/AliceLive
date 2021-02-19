@@ -17,17 +17,18 @@ p, h1, input {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   border: none;
-  border-radius: 2.5px;
+  border-radius: 4px;
   background-color: #DDDDDD;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 2.5px;
+  border-radius: 4px;
   background-color: #353535;
 }
 
@@ -259,6 +260,7 @@ p, h1, input {
   min-width: calc(100vw - 700px);
   height: 100vh;
   right: 0;
+  overflow: scroll;
 }
 
 #preview canvas {
@@ -266,6 +268,15 @@ p, h1, input {
   height: 100%;
   object-fit: contain;
   background-color: #000000;
+}
+
+#mouseMoveArea {
+  width: calc(50vw - 8px);
+  min-width: calc(100vw - 700px - 8px);
+  height: calc(100vh - 8px);
+  position: absolute;
+  margin: auto;
+  right: 8px;
 }
 
 #customAlertCheckbox {

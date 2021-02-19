@@ -4,7 +4,8 @@
 
   let verticalValue = 0.5, horizontalValue = 0.5;
   let openEye = true, openMouth = false;
-  let canvas, canvasCtx, canvasSize;
+  let canvas, canvasCtx, canvasSize, mouseMoveArea;
+  let magnification = 1, enlarge = true;
 
   addEventListener('load', () => {
     canvas = document.querySelector('canvas');
@@ -17,31 +18,33 @@
     canvasSize.width.value = canvas.width;
     canvasSize.height.value = canvas.height;
 
+    mouseMoveArea = document.querySelector('#mouseMoveArea');
+
     waitEvents();
     draw();
   }, false);
 
   function waitEvents () {
-    canvas.addEventListener('mousemove', (event) => {
-      const style = getComputedStyle(canvas);
+    mouseMoveArea.addEventListener('mousemove', (event) => {
+      const style = getComputedStyle(mouseMoveArea);
       horizontalValue = event.offsetX / Number(style.width.replace('px', ''));
       verticalValue = event.offsetY / Number(style.height.replace('px', ''));
       draw();
     }, false);
 
-    canvas.addEventListener('mousedown', (event) => {
+    mouseMoveArea.addEventListener('mousedown', (event) => {
       if (event.button === 0) openEye = false;
       if (event.button === 2) openMouth = true;
       draw();
     }, false);
 
-    canvas.addEventListener('mouseup', (event) => {
+    mouseMoveArea.addEventListener('mouseup', (event) => {
       if (event.button === 0) openEye = true;
       if (event.button === 2) openMouth = false;
       draw();
     }, false);
 
-    canvas.addEventListener('contextmenu', (event) => event.preventDefault(), false);
+    mouseMoveArea.addEventListener('contextmenu', (event) => event.preventDefault(), false);
 
     canvasSize.width.addEventListener('change', (event) => {
       let number = Number(event.target.value);
@@ -63,6 +66,23 @@
       canvas.height = number;
       saved = false;
       draw();
+    }, false);
+
+    addEventListener('keydown', (event) => {
+      if (event.code !== 'Space') return;
+      event.preventDefault();
+      if (magnification === 1) {
+        enlarge = true;
+        magnification++;
+      } else if (magnification === 5) {
+        enlarge = false;
+        magnification--;
+      } else {
+        if (enlarge) magnification++;
+        else magnification--;
+      }
+      canvas.style.width = `${magnification * 100}%`;
+      canvas.style.height = `${magnification * 100}%`;
     }, false);
 
     addEventListener('updatedList', draw, false);
