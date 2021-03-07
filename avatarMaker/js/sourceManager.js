@@ -161,7 +161,7 @@
 
   function save () {
     const obj = {
-      avatarVersion: 1,
+      avatarVersion: 1.1,
       canvasSize: {
         width: canvas.width,
         height: canvas.height
@@ -205,7 +205,7 @@
         return;
       }
       sources = [];
-      if (obj.avatarVersion && (obj.avatarVersion === 1)) {
+      if (obj.avatarVersion && ([1, 1.1].includes(obj.avatarVersion))) {
         if (obj.canvasSize) {
           if (obj.canvasSize.width) {
             canvas.width = obj.canvasSize.width;
@@ -227,6 +227,7 @@
               if (parts.move.right) source.setMoveRight(parts.move.right);
               if (parts.move.top) source.setMoveTop(parts.move.top);
               if (parts.move.bottom) source.setMoveBottom(parts.move.bottom);
+              if (parts.move.splitScaling) source.setSplitScaling(parts.move.splitScaling);
             }
             if (parts.openEye) source.setOpenEye(true);
             if (parts.closedEye) source.setClosedEye(true);
@@ -274,14 +275,15 @@
         const box = document.createElement('div');
         div.appendChild(box);
 
-        ['left', 'right', 'top', 'bottom'].forEach((type) => {
+        ['left', 'right', 'top', 'bottom', 'splitScaling'].forEach((type) => {
           const input = document.createElement('input');
           input.setAttribute('type', 'number');
           input.setAttribute('step', '1');
           input.setAttribute('data-type', type);
           input.value = source.getMove()[type];
           input.addEventListener('change', (event) => {
-            const number = Number(event.target.value);
+            let number = Number(event.target.value);
+            if (isNaN(number)) number = 0;
             event.target.value = number;
             switch (event.target.dataset.type) {
               case 'left':
@@ -295,6 +297,9 @@
                 break;
               case 'bottom':
                 source.setMoveBottom(number);
+                break;
+              case 'splitScaling':
+                source.setSplitScaling(number);
                 break;
             }
             saved = false;

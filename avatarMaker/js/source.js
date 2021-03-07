@@ -9,7 +9,7 @@
     return new Promise(async (resolve, reject) => {
       const image = await getImage(data).catch((e) => reject(e));
       _this.move = {};
-      _this.setMoveAll(0, 0, 0, 0);
+      _this.setMoveAll(0, 0, 0, 0, 0);
       _this.setOpenEye(false);
       _this.setClosedEye(false);
       _this.setOpenMouth(false);
@@ -61,11 +61,12 @@
     getClosedMouth: function () {
       return this.closedMouth;
     },
-    setMoveAll: function (left, right, top, bottom) {
+    setMoveAll: function (left, right, top, bottom, splitScaling) {
       this.move.left = left;
       this.move.right = right;
       this.move.top = top;
       this.move.bottom = bottom;
+      this.move.splitScaling = splitScaling;
     },
     setMoveLeft: function (left) {
       this.move.left = left;
@@ -78,6 +79,9 @@
     },
     setMoveBottom: function (bottom) {
       this.move.bottom = bottom;
+    },
+    setSplitScaling: function (splitScaling) {
+      this.move.splitScaling = splitScaling;
     },
     setOpenEye: function (bool) {
       this.openEye = bool;

@@ -104,21 +104,66 @@
 
       const move = sources[i].getMove();
       const size = sources[i].getSize();
-      canvasCtx.drawImage(
-        sources[i].getData(),
-        calcCoordinate(
+
+      if (move.splitScaling !== 0) {
+        const x = calcCoordinate(
           move.left,
           move.right,
           horizontalValue
-        ) + (canvas.width - size.width) / 2,
-        calcCoordinate(
+        );
+        const y = calcCoordinate(
           move.top,
           move.bottom,
           verticalValue
-        ) + (canvas.height - size.height) / 2,
-        size.width,
-        size.height
-      );
+        );
+
+        let scaling;
+        if (horizontalValue < 0.5) {
+          scaling = -move.splitScaling * (1 - (horizontalValue * 2));
+        } else {
+          scaling = move.splitScaling * ((horizontalValue - 0.5) * 2);
+        }
+
+        canvasCtx.drawImage(
+          sources[i].getData(),
+          0,
+          0,
+          (size.width / 2),
+          size.height,
+          (x + (canvas.width - size.width) / 2),
+          (y + (canvas.height - size.height) / 2),
+          (size.width / 2) + scaling,
+          size.height
+        );
+
+        canvasCtx.drawImage(
+          sources[i].getData(),
+          (size.width / 2),
+          0,
+          (size.width / 2),
+          size.height,
+          (x + (canvas.width - size.width) / 2) + (size.width / 2) + scaling,
+          (y + (canvas.height - size.height) / 2),
+          (size.width / 2) - scaling,
+          size.height
+        );
+      } else {
+        canvasCtx.drawImage(
+          sources[i].getData(),
+          calcCoordinate(
+            move.left,
+            move.right,
+            horizontalValue
+          ) + (canvas.width - size.width) / 2,
+          calcCoordinate(
+            move.top,
+            move.bottom,
+            verticalValue
+          ) + (canvas.height - size.height) / 2,
+          size.width,
+          size.height
+        );
+      }
     }
   }
 
