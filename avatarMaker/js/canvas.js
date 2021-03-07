@@ -105,18 +105,18 @@
       const move = sources[i].getMove();
       const size = sources[i].getSize();
 
-      if (move.splitScaling !== 0) {
-        const x = calcCoordinate(
-          move.left,
-          move.right,
-          horizontalValue
-        );
-        const y = calcCoordinate(
-          move.top,
-          move.bottom,
-          verticalValue
-        );
+      const x = calcCoordinate(
+        move.left,
+        move.right,
+        horizontalValue
+      ) + (canvas.width - size.width) / 2;
+      const y = calcCoordinate(
+        move.top,
+        move.bottom,
+        verticalValue
+      ) + (canvas.height - size.height) / 2;
 
+      if (move.splitScaling !== 0) {
         let scaling;
         if (horizontalValue < 0.5) {
           scaling = -move.splitScaling * (1 - (horizontalValue * 2));
@@ -130,8 +130,8 @@
           0,
           (size.width / 2),
           size.height,
-          (x + (canvas.width - size.width) / 2),
-          (y + (canvas.height - size.height) / 2),
+          x,
+          y,
           (size.width / 2) + scaling,
           size.height
         );
@@ -142,24 +142,16 @@
           0,
           (size.width / 2),
           size.height,
-          (x + (canvas.width - size.width) / 2) + (size.width / 2) + scaling,
-          (y + (canvas.height - size.height) / 2),
+          x + (size.width / 2) + scaling,
+          y,
           (size.width / 2) - scaling,
           size.height
         );
       } else {
         canvasCtx.drawImage(
           sources[i].getData(),
-          calcCoordinate(
-            move.left,
-            move.right,
-            horizontalValue
-          ) + (canvas.width - size.width) / 2,
-          calcCoordinate(
-            move.top,
-            move.bottom,
-            verticalValue
-          ) + (canvas.height - size.height) / 2,
+          x,
+          y,
           size.width,
           size.height
         );
