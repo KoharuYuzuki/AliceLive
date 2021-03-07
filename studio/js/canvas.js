@@ -146,27 +146,64 @@
         width: deformation.w / data.canvasSize.width,
         height: deformation.h / data.canvasSize.height
       };
-      backCanvasCtx.drawImage(
-        parts.getData(),
-        deformation.x + (
-          calcCoordinate(
-            move.left,
-            move.right,
-            source.getHorizontalValue()
-          ) +
-          (data.canvasSize.width - size.width) / 2
-        ) * times.width,
-        deformation.y + (
-          calcCoordinate(
-            move.top,
-            move.bottom,
-            source.getVerticalValue()
-          ) +
-          (data.canvasSize.height - size.height) / 2
-        ) * times.height,
-        size.width * times.width,
-        size.height * times.height
-      );
+
+      const x = deformation.x + (
+        calcCoordinate(
+          move.left,
+          move.right,
+          source.getHorizontalValue()
+        ) +
+        (data.canvasSize.width - size.width) / 2
+      ) * times.width;
+      const y = deformation.y + (
+        calcCoordinate(
+          move.top,
+          move.bottom,
+          source.getVerticalValue()
+        ) +
+        (data.canvasSize.height - size.height) / 2
+      ) * times.height;
+
+      if (move.splitScaling !== 0) {
+        let scaling;
+        if (source.getHorizontalValue() < 0.5) {
+          scaling = -move.splitScaling * (1 - (source.getHorizontalValue() * 2));
+        } else {
+          scaling = move.splitScaling * ((source.getHorizontalValue() - 0.5) * 2);
+        }
+
+        backCanvasCtx.drawImage(
+          parts.getData(),
+          0,
+          0,
+          (size.width / 2),
+          size.height,
+          x,
+          y,
+          ((size.width / 2) + scaling) * times.width,
+          size.height * times.height
+        );
+
+        backCanvasCtx.drawImage(
+          parts.getData(),
+          (size.width / 2),
+          0,
+          (size.width / 2),
+          size.height,
+          x + ((size.width / 2) + scaling) * times.width,
+          y,
+          ((size.width) / 2 - scaling) * times.width,
+          size.height * times.height
+        );
+      } else {
+        backCanvasCtx.drawImage(
+          parts.getData(),
+          x,
+          y,
+          size.width * times.width,
+          size.height * times.height
+        );
+      }
     }
   }
 

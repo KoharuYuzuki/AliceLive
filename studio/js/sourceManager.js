@@ -186,7 +186,7 @@
             continue;
           }
           data = {};
-          if (obj.avatarVersion && (obj.avatarVersion === 1)) {
+          if (obj.avatarVersion && ([1, 1.1].includes(obj.avatarVersion))) {
             if (obj.canvasSize) {
               data.canvasSize = {};
               if (obj.canvasSize.width) data.canvasSize.width = obj.canvasSize.width;
@@ -209,6 +209,7 @@
                   if (parts.move.right) source.setMoveRight(parts.move.right);
                   if (parts.move.top) source.setMoveTop(parts.move.top);
                   if (parts.move.bottom) source.setMoveBottom(parts.move.bottom);
+                  if (parts.move.splitScaling) source.setSplitScaling(parts.move.splitScaling);
                 }
                 if (parts.openEye) source.setOpenEye(true);
                 if (parts.closedEye) source.setClosedEye(true);
