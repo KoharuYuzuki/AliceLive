@@ -28,14 +28,24 @@
     "tabs",
     "contextMenus"
   ],
-  "web_accessible_resources": [{
-    "resources": [
-      "manifest.json",
-      "LICENSE",
-      "contentScript/hook.js",
-      "contentScript/keyframe.css"
-    ],
-    "matches": [],
-    "extension_ids": []
-  }]
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "manifest.json",
+        "LICENSE"
+      ],
+      "matches": [],
+      "extension_ids": []
+    },
+    {
+      "resources": [
+        "contentScript/hook.js",
+        "contentScript/keyframe.css"
+      ],
+      "matches": [
+        "https://studio.youtube.com/*"
+      ],
+      "extension_ids": []
+    }
+  ]
 }
