@@ -97,6 +97,7 @@
   }
 
   function load () {
+    if (!device) return;
     const extensions = ['.json', '.JSON'];
     selectFiles(extensions, false)
     .then(async (files) => {
