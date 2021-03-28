@@ -104,20 +104,20 @@
     gainNode.gain.value = source.getVolume() / 100;
     gainNode.connect(gainNode0);
 
+    const pitchShifter = new Tone.PitchShift(values.pitch * 12);
+    pitchShifter.connect(gainNode);
+
+    const frequencyShifter = new Tone.FrequencyShifter(values.frequency);
+    frequencyShifter.connect(pitchShifter);
+
     const lowpassFilter = new Tone.Filter(values.lowpass, 'lowpass');
-    Tone.connect(lowpassFilter, gainNode);
+    Tone.connect(lowpassFilter, frequencyShifter);
 
     const highpassFilter = new Tone.Filter(values.highpass, 'highpass');
     highpassFilter.connect(lowpassFilter);
 
-    const frequencyShifter = new Tone.FrequencyShifter(values.frequency);
-    frequencyShifter.connect(highpassFilter);
-
-    const pitchShifter = new Tone.PitchShift(values.pitch * 12);
-    pitchShifter.connect(frequencyShifter);
-
     const streamSource = audioCtx.createMediaStreamSource(stream);
-    Tone.connect(streamSource, pitchShifter);
+    Tone.connect(streamSource, highpassFilter);
 
     const uuid = source.getUUID();
     uuids.push(uuid);
