@@ -115,11 +115,11 @@
       }
       if (
         (obj.voiceVersion === 1) &&
-        obj.pitch &&
-        obj.frequency &&
-        obj.highpass &&
-        obj.lowpass &&
-        obj.volume
+        ('pitch' in obj) &&
+        ('frequency' in obj) &&
+        ('highpass' in obj) &&
+        ('lowpass' in obj) &&
+        ('volume' in obj)
       ) {
         values.pitch     = obj.pitch;
         values.frequency = obj.frequency;

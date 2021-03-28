@@ -247,11 +247,11 @@
           data = {};
           if (
             (obj.voiceVersion === 1) &&
-            obj.pitch &&
-            obj.frequency &&
-            obj.highpass &&
-            obj.lowpass &&
-            obj.volume
+            ('pitch' in obj) &&
+            ('frequency' in obj) &&
+            ('highpass' in obj) &&
+            ('lowpass' in obj) &&
+            ('volume' in obj)
           ) {
             data.pitch     = obj.pitch;
             data.frequency = obj.frequency;
