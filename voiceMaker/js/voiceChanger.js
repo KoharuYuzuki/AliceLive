@@ -69,20 +69,20 @@
     const gain = new Tone.Gain(values.volume / 100);
     Tone.connect(gain, audioCtx.destination);
 
+    const pitchShifter = new Tone.PitchShift(values.pitch * 12);
+    pitchShifter.connect(gain);
+
+    const frequencyShifter = new Tone.FrequencyShifter(values.frequency);
+    frequencyShifter.connect(pitchShifter);
+
     const lowpassFilter = new Tone.Filter(values.lowpass, 'lowpass');
-    lowpassFilter.connect(gain);
+    Tone.connect(lowpassFilter, frequencyShifter);
 
     const highpassFilter = new Tone.Filter(values.highpass, 'highpass');
     highpassFilter.connect(lowpassFilter);
 
-    const frequencyShifter = new Tone.FrequencyShifter(values.frequency);
-    frequencyShifter.connect(highpassFilter);
-
-    const pitchShifter = new Tone.PitchShift(values.pitch * 12);
-    pitchShifter.connect(frequencyShifter);
-
     const streamSource = audioCtx.createMediaStreamSource(device.stream);
-    Tone.connect(streamSource, pitchShifter);
+    Tone.connect(streamSource, highpassFilter);
   }
 
   function save () {
