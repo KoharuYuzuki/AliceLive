@@ -51,12 +51,19 @@ p, h1, input {
   top: 0;
   background-color: $black;
   canvas {
-    height: 100%;
     aspect-ratio: 16 / 9;
     position: absolute;
     margin: auto;
+    top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
+    &[vertical] {
+      height: 100%;
+    }
+    &[horizontal] {
+      width: 100%;
+    }
   }
 }
 

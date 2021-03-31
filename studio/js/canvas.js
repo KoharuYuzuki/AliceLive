@@ -24,6 +24,9 @@
         drawSkip = false;
       }
     }, false);
+
+    changeCanvasAttribute();
+    addEventListener('resize', changeCanvasAttribute, false);
   }, false);
 
   addEventListener('updatedList', () => {
@@ -372,6 +375,16 @@
 
   function copyCanvas () {
     canvasCtx.drawImage(backCanvas, 0, 0, canvas.width, canvas.height);
+  }
+
+  function changeCanvasAttribute () {
+    if ((innerWidth / (innerHeight * 0.6)) < (16 / 9)) {
+      canvas.setAttribute('horizontal', null);
+      canvas.removeAttribute('vertical');
+    } else {
+      canvas.setAttribute('vertical', null);
+      canvas.removeAttribute('horizontal');
+    }
   }
 
 })();

@@ -43,12 +43,21 @@ p, h1, input {
 }
 
 #preview canvas {
-  height: 100%;
   aspect-ratio: 16 / 9;
   position: absolute;
   margin: auto;
+  top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
+}
+
+#preview canvas[vertical] {
+  height: 100%;
+}
+
+#preview canvas[horizontal] {
+  width: 100%;
 }
 
 #setting {
