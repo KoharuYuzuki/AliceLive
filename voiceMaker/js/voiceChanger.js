@@ -40,7 +40,12 @@
       }, false);
     });
 
-    selectDevice('audio')
+    selectDevice('audio', {
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: true
+      }
+    })
     .then((_device) => device = _device)
     .catch((e) => console.error(e));
 

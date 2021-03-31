@@ -386,7 +386,12 @@
   }
 
   function addSoundInput () {
-    selectDevice('audio')
+    selectDevice('audio', {
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: true
+      }
+    })
     .then(({deviceName, stream}) => {
       return new Source(deviceName, 'soundInput', stream);
     })

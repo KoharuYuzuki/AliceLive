@@ -157,7 +157,12 @@
         });
       }
       if (_this.type === 'voiceChanger') {
-        const audioDevice = await selectDevice('audio').catch((e) => reject(e));
+        const audioDevice = await selectDevice('audio', {
+          audio: {
+            echoCancellation: false,
+            noiseSuppression: true
+          }
+        }).catch((e) => reject(e));
         let audio;
         if (audioDevice) audio = await getAudio('stream', audioDevice.stream).catch((e) => reject(e));
         else return;
