@@ -23,7 +23,7 @@
       }
 
       if (_this.type === 'avatar') {
-        const intervalIds = [];
+        const intervalWorkers = [];
         const videoDevice = await selectDevice('video', {
           video: {width: 128, height: 128}
         }).catch((e) => reject(e));
@@ -63,29 +63,39 @@
           const verticalStep = ((data.y / (video.videoHeight - data.height)) - _this.getVerticalValue()) / 6;
           const horizontalStep = ((data.x / (video.videoWidth - data.width)) - _this.getHorizontalValue()) / 6;
           let counter = 0;
-          const intervalId = setInterval(() => {
-            if (counter >= 4) clearInterval(intervalId);
+          const worker = new Worker('./js/intervalWorker.js');
+          worker.postMessage({interval: 1000 / 10 / 6});
+          worker.addEventListener('message', () => {
+            if (counter >= 4) worker.terminate();
             const verticalValue = _this.getVerticalValue() + verticalStep;
             const horizontalValue = _this.getHorizontalValue() + horizontalStep;
             _this.setVerticalValue((verticalValue < 0) ? 0 : (verticalValue > 1) ? 1 : verticalValue);
             _this.setHorizontalValue((horizontalValue < 0) ? 0 : (horizontalValue > 1) ? 1 : horizontalValue);
             counter++;
-          }, 1000 / 10 / 6);
+          }, false);
         });
 
-        intervalIds.push(setInterval(() => {
+        const faceTrackingIntervalWorker = new Worker('./js/intervalWorker.js');
+        faceTrackingIntervalWorker.postMessage({interval: 1000 / 10});
+        faceTrackingIntervalWorker.addEventListener('message', () => {
           canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
           tracking.track(canvas, objects);
-        }, 1000 / 10));
+        }, false);
+        intervalWorkers.push(faceTrackingIntervalWorker);
 
-        intervalIds.push(setInterval(() => {
+        const closeEyeIntervalWorker = new Worker('./js/intervalWorker.js');
+        closeEyeIntervalWorker.postMessage({interval: 1000});
+        closeEyeIntervalWorker.addEventListener('message', () => {
           const num = Math.floor(Math.random() * 10);
           if (num !== 0) return;
           _this.setEyeOpen(false);
-          setTimeout(() => {
+          const worker = new Worker('./js/timeoutWorker.js');
+          worker.postMessage({timeout: 100});
+          worker.addEventListener('message', () => {
             _this.setEyeOpen(true);
-          }, 100);
-        }, 1000));
+          }, false);
+        }, false);
+        intervalWorkers.push(closeEyeIntervalWorker);
 
         const audioCtx = new AudioContext();
         const analyser = audioCtx.createAnalyser();
@@ -94,7 +104,9 @@
         const streamSource = audioCtx.createMediaStreamSource(audio.srcObject);
         streamSource.connect(analyser);
 
-        intervalIds.push(setInterval(() => {
+        const maxVolumeIntervalWorker = new Worker('./js/intervalWorker.js');
+        maxVolumeIntervalWorker.postMessage({interval: 1000 / 10});
+        maxVolumeIntervalWorker.addEventListener('message', () => {
           const data = new Uint8Array(analyser.fftSize);
           analyser.getByteTimeDomainData(data);
           const maxValue = data.reduce((a, b) => Math.max(a, b)) - 128;
@@ -109,11 +121,12 @@
               volume: maxValue
             }
           }));
-        }, 1000 / 10));
+        }, false);
+        intervalWorkers.push(maxVolumeIntervalWorker);
 
         setReadOnlyProperties(_this, {
           audioContext: audioCtx,
-          intervalIds
+          intervalWorkers
         });
       }
       if (_this.type === 'picture') {
@@ -300,8 +313,8 @@
     getAudioContext: function () {
       return this.audioContext;
     },
-    getIntervalIds: function () {
-      return this.intervalIds;
+    getIntervalWorkers: function () {
+      return this.intervalWorkers;
     },
     getStream: function () {
       return this.stream;

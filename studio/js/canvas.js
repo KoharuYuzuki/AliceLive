@@ -15,7 +15,9 @@
     backCanvas.height = canvas.height;
     backCanvasCtx = backCanvas.getContext('2d');
 
-    setInterval(draw, 1000 / 60);
+    const worker = new Worker('./js/intervalWorker.js');
+    worker.postMessage({interval: 1000 / 60});
+    worker.addEventListener('message', draw, false);
 
     document.querySelector('.pause .checkbox input').addEventListener('change', (event) => {
       if (event.target.checked) {

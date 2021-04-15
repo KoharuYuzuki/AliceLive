@@ -3,7 +3,11 @@
 (() => {
 
   addEventListener('load', () => {
-    setInterval(checkComment, 200);
+    const script = 'addEventListener(\'message\', (event) => setInterval(() => postMessage(null), event.data.interval), false);';
+    const blob = new Blob([script], {type: 'text/javascript'});
+    const worker = new Worker(URL.createObjectURL(blob));
+    worker.postMessage({interval: 1000 / 5});
+    worker.addEventListener('message', checkComment, false);
   }, false);
 
   function checkComment () {

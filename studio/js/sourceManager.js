@@ -115,7 +115,7 @@
       if (sources[id][i].getUUID() !== uuid) continue;
       const type = sources[id][i].getType();
       if (type === 'avatar') {
-        sources[id][i].getIntervalIds().forEach((id) => clearInterval(id));
+        sources[id][i].getIntervalWorkers().forEach((worker) => worker.terminate());
         sources[id][i].getAudioContext().close();
       }
       if (['capture', 'soundInput'].includes(type)) {
