@@ -16,7 +16,14 @@
  * limitations under the License.
 */
 
-var JEELIZFACEEXPRESSIONS=(function(){function ba(){this.va=!1;this.$=null;this.yd=void 0;this.Z=1;this.vc=this.Md=0;this.ra=null}function ea(a){if(a.va)throw new TypeError("Generator is already running");a.va=!0}ba.prototype.wa=function(a){this.yd=a};ba.prototype.ya=function(a){this.ra={Zd:a,we:!0};this.Z=this.Md||this.vc};ba.prototype.return=function(a){this.ra={return:a};this.Z=this.vc};function ka(a){this.o=new ba;this.Le=a}ka.prototype.wa=function(a){ea(this.o);if(this.o.$)return oa(this,this.o.$.next,a,this.o.wa);this.o.wa(a);return ra(this)};
+// Change History (KoharuYuzuki)
+//
+// 2021.04.17
+// - window.JEELIZFACEEXPRESSIONS=Y; -> Delete
+// - return JEELIZFACEEXPRESSIONS||window.JEELIZFACEEXPRESSIONS; -> return Y;
+// - var JEELIZFACEEXPRESSIONS=(function(){...})(); -> function JeelizFaceExpressions(){...}
+
+function JeelizFaceExpressions(){function ba(){this.va=!1;this.$=null;this.yd=void 0;this.Z=1;this.vc=this.Md=0;this.ra=null}function ea(a){if(a.va)throw new TypeError("Generator is already running");a.va=!0}ba.prototype.wa=function(a){this.yd=a};ba.prototype.ya=function(a){this.ra={Zd:a,we:!0};this.Z=this.Md||this.vc};ba.prototype.return=function(a){this.ra={return:a};this.Z=this.vc};function ka(a){this.o=new ba;this.Le=a}ka.prototype.wa=function(a){ea(this.o);if(this.o.$)return oa(this,this.o.$.next,a,this.o.wa);this.o.wa(a);return ra(this)};
 function ta(a,c){ea(a.o);var d=a.o.$;if(d)return oa(a,"return"in d?d["return"]:function(h){return{value:h,done:!0}},c,a.o.return);a.o.return(c);return ra(a)}ka.prototype.ya=function(a){ea(this.o);if(this.o.$)return oa(this,this.o.$["throw"],a,this.o.wa);this.o.ya(a);return ra(this)};
 function oa(a,c,d,h){try{var r=c.call(a.o.$,d);if(!(r instanceof Object))throw new TypeError("Iterator result "+r+" is not an object");if(!r.done)return a.o.va=!1,r;var n=r.value}catch(l){return a.o.$=null,a.o.ya(l),ra(a)}a.o.$=null;h.call(a.o,n);return ra(a)}
 function ra(a){for(;a.o.Z;)try{var c=a.Le(a.o);if(c)return a.o.va=!1,{value:c.value,done:!1}}catch(d){a.o.yd=void 0,a.o.ya(d)}a.o.va=!1;if(a.o.ra){c=a.o.ra;a.o.ra=null;if(c.we)throw c.Zd;return{value:c.return,done:!0}}return{value:void 0,done:!0}}function ua(a){this.next=function(c){return a.wa(c)};this.throw=function(c){return a.ya(c)};this.return=function(c){return ta(a,c)};this[Symbol.iterator]=function(){return this}}
@@ -171,5 +178,5 @@ y&&(y.m(),y=null);P=H.Sd},Ld:function(A){Y.hb&&Y.hb();var F={video:{facingMode:{
 Y.switch_displayVideo=function(a){Y.Ba=a;Y.Aa&&(Y.Aa.style.display=Y.Ba?"block":"none")};Y.onWebcamAsk=function(a){Y.hb=a};Y.onContextLost=function(a){Y.gb=a};Y.onWebcamGet=function(a){Y.ib=a};Y.destroy=function(){Ab.m();Eb&&Eb.srcObject&&Eb.srcObject.getTracks().forEach(function(a){a.stop()});Gb.forEach(function(a){a.m()});Gb.splice(0);Ua.m();Y.switch_displayVideo(!1);Y.initialized=!1;Y.ia.splice(0)};Y.set_size=function(a,c){b.width=a;b.height=c};Y.get_size=function(){return{width:b.width,height:b.height}};
 Y.get_videoStream=function(){return Db};Y.get_video=function(){return Eb};Y.get_cv=function(){return Ua.La()};Y.set_color=function(a){G.I("s56",[{type:"3f",name:"u41",value:a}])};
 Y.init=function(a){var c=Hb(),d=a.callbackReady?a.callbackReady:function(n){console.log("ERR:",n)},h=a.callbackReady?a.callbackReady.bind(null,!1):!1;if(a.canvasId||a.canvas){var r=a.canvas?a.canvas:document.getElementById(a.canvasId);if(r)if(Y.initialized)d("ALREADY_INITIALIZED");else{Y.initialized=!0;window.eb=d?function(n){d(n);window.eb=!1}:!1;a.NNCPath&&(b.bc=a.NNCPath);"undefined"!==typeof a.NNC&&(Fb="string"===typeof a.NNC?JSON.parse(a.NNC):a.NNC);h&&Y.ia.push(h);if(!Ua.s({ob:r,width:b.width,
-height:b.height,debug:!1,Bb:!1,Wc:function(){Y.gb&&Y.gb()},premultipliedAlpha:!1}))return d("GL_INCOMPATIBLE"),!1;Y.Aa=Ua.La();Y.Ba||(Y.Aa.style.display="none");a.videoSettings&&a.videoSettings.videoElement?c.Qc(a.videoSettings.videoElement,!1):(a.videoSettings&&Object.assign(Cb,a.videoSettings),c.Ld(function(n){c.Qc(n,!1)}));return!0}else d("INVALID_CANVAS")}else d("NO_CANVASID")};window.JEELIZFACEEXPRESSIONS=Y;
-;return JEELIZFACEEXPRESSIONS||window.JEELIZFACEEXPRESSIONS;})();
+height:b.height,debug:!1,Bb:!1,Wc:function(){Y.gb&&Y.gb()},premultipliedAlpha:!1}))return d("GL_INCOMPATIBLE"),!1;Y.Aa=Ua.La();Y.Ba||(Y.Aa.style.display="none");a.videoSettings&&a.videoSettings.videoElement?c.Qc(a.videoSettings.videoElement,!1):(a.videoSettings&&Object.assign(Cb,a.videoSettings),c.Ld(function(n){c.Qc(n,!1)}));return!0}else d("INVALID_CANVAS")}else d("NO_CANVASID")};
+;return Y;}
