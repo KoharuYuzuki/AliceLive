@@ -6,11 +6,17 @@
   window.comments = {};
 
   chrome.runtime.onMessage.addListener((message) => {
-    if (message.type !== 'sendComment') return;
-    if (!message.uuid) return;
-    if (commentUUIDs.includes(message.uuid)) return;
-    commentUUIDs.push(message.uuid);
-    comments[message.uuid] = message.detail;
+    if (message.type === 'sendComment') {
+      if (!message.detail.uuid || commentUUIDs.includes(message.detail.uuid)) return;
+      commentUUIDs.unshift(message.detail.uuid);
+      comments[message.detail.uuid] = {
+        name: message.detail.name,
+        comment: message.detail.comment
+      };
+    } else if (message.type === 'sendDeleteCommentId') {
+      if (!message.detail.uuid || (comments[message.detail.uuid] === null)) return;
+      comments[message.detail.uuid] = null;
+    }
   });
 
 })();

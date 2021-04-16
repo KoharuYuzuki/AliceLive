@@ -269,11 +269,12 @@
     backCanvasCtx.strokeStyle = '#252525';
     backCanvasCtx.fillStyle = '#FFFFFF';
 
-    const uuids = [...commentUUIDs].reverse();
     let lineCounter = 0;
 
-    for (let i = 0; i < uuids.length; i++) {
-      const uuid = uuids[i];
+    for (let i = 0; i < commentUUIDs.length; i++) {
+      const uuid = commentUUIDs[i];
+      if (comments[uuid] === null) continue;
+
       const str = `${comments[uuid].name} : ${comments[uuid].comment}`;
       const commentSplit = [];
 

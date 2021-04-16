@@ -15,15 +15,31 @@
       '#message.style-scope.yt-live-chat-text-message-renderer:not([data-checked])'
     );
 
+    const deleteStates = document.querySelectorAll(
+      '#deleted-state.style-scope.yt-live-chat-text-message-renderer:not(:empty):not([data-checked])'
+    );
+
     comments.forEach((comment) => {
+      const uuid = genUniqueUUID();
       comment.setAttribute('data-checked', true);
+      comment.setAttribute('data-uuid', uuid);
       chrome.runtime.sendMessage({
         type: 'sendComment',
         detail: {
+          uuid,
           name: comment.parentNode.querySelector('#author-name').innerText,
           comment: comment.innerText
-        },
-        uuid: genUniqueUUID()
+        }
+      });
+    });
+
+    deleteStates.forEach((state) => {
+      state.setAttribute('data-checked', true);
+      chrome.runtime.sendMessage({
+        type: 'sendDeleteCommentId',
+        detail: {
+          uuid: state.previousElementSibling.dataset.uuid
+        }
       });
     });
   }
