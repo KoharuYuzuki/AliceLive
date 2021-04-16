@@ -1030,4 +1030,8 @@ p, h1, input {
   cursor: pointer;
   white-space: nowrap;
 }
+
+#webojiCanvas {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */

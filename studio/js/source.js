@@ -25,7 +25,7 @@
       if (_this.type === 'avatar') {
         const intervalWorkers = [];
         const videoDevice = await selectDevice('video', {
-          video: {width: 128, height: 128}
+          video: {width: 512, height: 512}
         }).catch((e) => reject(e));
         let video;
         if (videoDevice) video = await getVideo(videoDevice.stream).catch((e) => reject(e));
@@ -49,39 +49,43 @@
           data
         });
 
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const canvasCtx = canvas.getContext('2d');
-        canvasCtx.scale(-1, 1);
-        canvasCtx.translate(-canvas.width, 0);
+        let verticalStep = 0;
+        let horizontalStep = 0;
 
-        const objects = new tracking.ObjectTracker(['face']);
-        objects.on('track', (event) => {
-          if (event.data.length <= 0) return;
-          const data = event.data[0];
-          const verticalStep = ((data.y / (video.videoHeight - data.height)) - _this.getVerticalValue()) / 6;
-          const horizontalStep = ((data.x / (video.videoWidth - data.width)) - _this.getHorizontalValue()) / 6;
-          let counter = 0;
-          const worker = new Worker('./js/intervalWorker.js');
-          worker.postMessage({interval: 1000 / 10 / 6});
-          worker.addEventListener('message', () => {
-            if (counter >= 4) worker.terminate();
-            const verticalValue = _this.getVerticalValue() + verticalStep;
-            const horizontalValue = _this.getHorizontalValue() + horizontalStep;
-            _this.setVerticalValue((verticalValue < 0) ? 0 : (verticalValue > 1) ? 1 : verticalValue);
-            _this.setHorizontalValue((horizontalValue < 0) ? 0 : (horizontalValue > 1) ? 1 : horizontalValue);
-            counter++;
-          }, false);
+        JEELIZFACEEXPRESSIONS.init({
+          canvasId: 'webojiCanvas',
+          videoSettings: {
+            videoElement: video
+          },
+          NNCPath: './js/lib/weboji/',
+          callbackReady: (errorCode) => {
+            if (errorCode) {
+              console.error(errorCode);
+              reject(errorCode);
+            }
+            const faceTrackingIntervalWorker = new Worker('./js/intervalWorker.js');
+            faceTrackingIntervalWorker.postMessage({interval: 1000 / 10});
+            faceTrackingIntervalWorker.addEventListener('message', () => {
+              if (!JEELIZFACEEXPRESSIONS.is_detected()) return;
+              const rotation = JEELIZFACEEXPRESSIONS.get_rotationStabilized();
+              const x = (rotation[0] * (180 / Math.PI) + 5) * (1 / 35); // -5~30 => 0~35 => 0~1
+              const y = (rotation[1] * (180 / Math.PI) + 40) * (1 / 80); // -40~40 => 0~80 => 0~1
+              verticalStep = (x - _this.getVerticalValue()) / 6;
+              horizontalStep = (y - _this.getHorizontalValue()) / 6;
+            }, false);
+            intervalWorkers.push(faceTrackingIntervalWorker);
+          }
         });
 
-        const faceTrackingIntervalWorker = new Worker('./js/intervalWorker.js');
-        faceTrackingIntervalWorker.postMessage({interval: 1000 / 10});
-        faceTrackingIntervalWorker.addEventListener('message', () => {
-          canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          tracking.track(canvas, objects);
+        const stepIntervalWorker = new Worker('./js/intervalWorker.js');
+        stepIntervalWorker.postMessage({interval: 1000 / 10 / 6});
+        stepIntervalWorker.addEventListener('message', () => {
+          const verticalValue = _this.getVerticalValue() + verticalStep;
+          const horizontalValue = _this.getHorizontalValue() + horizontalStep;
+          _this.setVerticalValue((verticalValue < 0) ? 0 : (verticalValue > 1) ? 1 : verticalValue);
+          _this.setHorizontalValue((horizontalValue < 0) ? 0 : (horizontalValue > 1) ? 1 : horizontalValue);
         }, false);
-        intervalWorkers.push(faceTrackingIntervalWorker);
+        intervalWorkers.push(stepIntervalWorker);
 
         const closeEyeIntervalWorker = new Worker('./js/intervalWorker.js');
         closeEyeIntervalWorker.postMessage({interval: 1000});
