@@ -52,7 +52,9 @@
         let verticalStep = 0;
         let horizontalStep = 0;
 
-        JEELIZFACEEXPRESSIONS.init({
+        const jeelizFaceExpressions = new JeelizFaceExpressions();
+
+        jeelizFaceExpressions.init({
           canvasId: 'webojiCanvas',
           videoSettings: {
             videoElement: video
@@ -66,8 +68,8 @@
             const faceTrackingIntervalWorker = new Worker('./js/intervalWorker.js');
             faceTrackingIntervalWorker.postMessage({interval: 1000 / 10});
             faceTrackingIntervalWorker.addEventListener('message', () => {
-              if (!JEELIZFACEEXPRESSIONS.is_detected()) return;
-              const rotation = JEELIZFACEEXPRESSIONS.get_rotationStabilized();
+              if (!jeelizFaceExpressions.is_detected()) return;
+              const rotation = jeelizFaceExpressions.get_rotationStabilized();
               const x = (rotation[0] * (180 / Math.PI) + 5) * (1 / 35); // -5~30 => 0~35 => 0~1
               const y = (rotation[1] * (180 / Math.PI) + 40) * (1 / 80); // -40~40 => 0~80 => 0~1
               verticalStep = (x - _this.getVerticalValue()) / 6;
