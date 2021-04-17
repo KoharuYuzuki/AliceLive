@@ -263,9 +263,12 @@
       else source.setFrameOpacity(0);
     }
 
+    const fontSize = 32;
+    const lineSpace = 8;
+
     backCanvasCtx.lineWidth = 6;
     backCanvasCtx.lineJoin = 'round';
-    backCanvasCtx.font = '21px \'Noto Sans JP\', \'sans-serif\'';
+    backCanvasCtx.font = `${fontSize}px 'Noto Sans JP', 'sans-serif'`;
     backCanvasCtx.strokeStyle = '#252525';
     backCanvasCtx.fillStyle = '#FFFFFF';
 
@@ -305,15 +308,15 @@
         backCanvasCtx.strokeText(
           str,
           deformation.x,
-          deformation.h - (lineCounter * (21 + 4)) + deformation.y
+          deformation.h - (lineCounter * (fontSize + lineSpace)) + deformation.y
         );
         backCanvasCtx.fillText(
           str,
           deformation.x,
-          deformation.h - (lineCounter * (21 + 4)) + deformation.y
+          deformation.h - (lineCounter * (fontSize + lineSpace)) + deformation.y
         );
         lineCounter++;
-        if (((lineCounter + 1) * (21 + 4)) > deformation.h) {
+        if (((lineCounter + 1) * (fontSize + lineSpace)) > deformation.h) {
           breakFlag = true;
           break;
         }
