@@ -43,7 +43,7 @@
     selectDevice('audio', {
       audio: {
         echoCancellation: false,
-        noiseSuppression: true
+        noiseSuppression: false
       }
     })
     .then((_device) => device = _device)

@@ -179,7 +179,7 @@
         const audioDevice = await selectDevice('audio', {
           audio: {
             echoCancellation: false,
-            noiseSuppression: true
+            noiseSuppression: false
           }
         }).catch((e) => reject(e));
         let audio;
