@@ -178,8 +178,9 @@
       if (_this.type === 'voiceChanger') {
         const audioDevice = await selectDevice('audio', {
           audio: {
-            echoCancellation: false,
-            noiseSuppression: false
+            autoGainControl: false,
+            echoCancellation: true,
+            noiseSuppression: true,
           }
         }).catch((e) => reject(e));
         let audio;

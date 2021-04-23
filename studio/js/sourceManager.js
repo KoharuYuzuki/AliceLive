@@ -388,8 +388,9 @@
   function addSoundInput () {
     selectDevice('audio', {
       audio: {
+        autoGainControl: false,
         echoCancellation: false,
-        noiseSuppression: true
+        noiseSuppression: false
       }
     })
     .then(({deviceName, stream}) => {
