@@ -40,6 +40,10 @@
       let x, y, draw = false;
 
       canvas.addEventListener('mousedown', (event) => {
+        const selectSource = document.querySelector('input[name="selectList"]:checked ~ div div input:checked');
+        if (!selectSource) return;
+        const uuid = selectSource.parentNode.dataset.uuid;
+        if (uuid !== source.getUUID()) return;
         if (event.button === 0) {
           const image = whiteboardCtx.getImageData(
             0, 0, whiteboard.width, whiteboard.height
