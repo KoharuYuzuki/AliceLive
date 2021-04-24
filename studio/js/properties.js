@@ -207,7 +207,7 @@
     source = sourceAll.filter((source) => source.getUUID() === uuid)[0];
     const type = source.getType();
 
-    if (type === 'avatar') {
+    if (['avatar', 'avatarLite'].includes(type)) {
       displayVisualSwitch(false);
       displaySoundSwitch(true);
       displayGateSwitch(false);
@@ -234,7 +234,7 @@
         displaySoundSwitch(true);
       }
     }
-    if (['avatar', 'picture', 'capture', 'comment', 'whiteboard'].includes(type)) {
+    if (['avatar', 'avatarLite', 'picture', 'capture', 'comment', 'whiteboard'].includes(type)) {
       setReferencePoint();
       setDeformation();
     }

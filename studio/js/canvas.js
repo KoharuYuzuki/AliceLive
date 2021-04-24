@@ -101,7 +101,7 @@
     for (let i = (sources.visual.length - 1); i >= 0; i--) {
       const source = sources.visual[i];
       const type = source.getType();
-      if (type === 'avatar') {
+      if (['avatar', 'avatarLite'].includes(type)) {
         drawAvatar(source);
       }
       if (type === 'picture') {

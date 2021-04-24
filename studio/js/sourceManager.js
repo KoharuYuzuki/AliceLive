@@ -29,6 +29,7 @@
 
     visualTypes = getElements({
       avatar:     '#visualSourceType .list #avatar',
+      avatarLite: '#visualSourceType .list #avatarLite',
       picture:    '#visualSourceType .list #picture',
       capture:    '#visualSourceType .list #capture',
       comment:    '#visualSourceType .list #comment',
@@ -74,6 +75,9 @@
     visualTypes.avatar.addEventListener('mouseup', () => {
       loadFiles('visual', 'avatar', ['.json']);
     }, false);
+    visualTypes.avatarLite.addEventListener('mouseup', () => {
+      loadFiles('visual', 'avatarLite', ['.json']);
+    }, false);
     visualTypes.picture.addEventListener('mouseup', () => {
       loadFiles('visual', 'picture', ['.png', '.jpeg', '.jpg']);
     }, false);
@@ -114,7 +118,7 @@
     for (let i = 0; i < sources[id].length; i++) {
       if (sources[id][i].getUUID() !== uuid) continue;
       const type = sources[id][i].getType();
-      if (type === 'avatar') {
+      if (['avatar', 'avatarLite'].includes(type)) {
         sources[id][i].getIntervalWorkers().forEach((worker) => worker.terminate());
         sources[id][i].getAudioContext().close();
       }
@@ -172,7 +176,7 @@
       const confirmed = extensionConfirm(files, extensions);
       for (let i = 0; i < confirmed.passed.length; i++) {
         let data;
-        if (fileType === 'avatar') {
+        if (['avatar', 'avatarLite'].includes(fileType)) {
           const json = await readFile(files[i], false);
           let obj;
           try {

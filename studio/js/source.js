@@ -13,7 +13,7 @@
         uuid: genUniqueUUID()
       });
 
-      if (['avatar', 'picture', 'capture', 'comment', 'whiteboard'].includes(_this.type)) {
+      if (['avatar', 'avatarLite', 'picture', 'capture', 'comment', 'whiteboard'].includes(_this.type)) {
         _this.setReferencePoint(0);
         _this.deformation = {};
       }
@@ -88,6 +88,115 @@
           _this.setHorizontalValue((horizontalValue < 0) ? 0 : (horizontalValue > 1) ? 1 : horizontalValue);
         }, false);
         intervalWorkers.push(stepIntervalWorker);
+
+        const closeEyeIntervalWorker = new Worker('./js/intervalWorker.js');
+        closeEyeIntervalWorker.postMessage({interval: 1000});
+        closeEyeIntervalWorker.addEventListener('message', () => {
+          const num = Math.floor(Math.random() * 10);
+          if (num !== 0) return;
+          _this.setEyeOpen(false);
+          const worker = new Worker('./js/timeoutWorker.js');
+          worker.postMessage({timeout: 100});
+          worker.addEventListener('message', () => {
+            _this.setEyeOpen(true);
+          }, false);
+        }, false);
+        intervalWorkers.push(closeEyeIntervalWorker);
+
+        const audioCtx = new AudioContext();
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+
+        const streamSource = audioCtx.createMediaStreamSource(audio.srcObject);
+        streamSource.connect(analyser);
+
+        const maxVolumeIntervalWorker = new Worker('./js/intervalWorker.js');
+        maxVolumeIntervalWorker.postMessage({interval: 1000 / 10});
+        maxVolumeIntervalWorker.addEventListener('message', () => {
+          const data = new Uint8Array(analyser.fftSize);
+          analyser.getByteTimeDomainData(data);
+          const maxValue = data.reduce((a, b) => Math.max(a, b)) - 128;
+          if (maxValue > _this.getGate()) {
+            _this.setMouthOpen(true);
+          } else {
+            _this.setMouthOpen(false);
+          }
+          dispatchEvent(new CustomEvent('updateMaxVolume', {
+            detail: {
+              uuid: _this.getUUID(),
+              volume: maxValue
+            }
+          }));
+        }, false);
+        intervalWorkers.push(maxVolumeIntervalWorker);
+
+        setReadOnlyProperties(_this, {
+          audioContext: audioCtx,
+          intervalWorkers
+        });
+      }
+      if (_this.type === 'avatarLite') {
+        const intervalWorkers = [];
+        const videoDevice = await selectDevice('video', {
+          video: {width: 128, height: 128}
+        }).catch((e) => reject(e));
+        let video;
+        if (videoDevice) video = await getVideo(videoDevice.stream).catch((e) => reject(e));
+        else return;
+
+        const audioDevice = await selectDevice('audio').catch((e) => reject(e));
+        let audio;
+        if (audioDevice) audio = await getAudio('stream', audioDevice.stream).catch((e) => reject(e));
+        else return;
+
+        if (!(video && audio)) return;
+
+        _this.setDeformationAll(0, 0, data.canvasSize.width, data.canvasSize.height);
+        _this.setVerticalValue(0.5);
+        _this.setHorizontalValue(0.5);
+        _this.setEyeOpen(true);
+        _this.setMouthOpen(false);
+        _this.setGate(0);
+        setReadOnlyProperties(_this, {
+          displayName: 'Avatar Lite',
+          data
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const canvasCtx = canvas.getContext('2d');
+        canvasCtx.scale(-1, 1);
+        canvasCtx.translate(-canvas.width, 0);
+
+        let verticalStep = 0;
+        let horizontalStep = 0;
+
+        const objects = new tracking.ObjectTracker(['face']);
+        objects.on('track', (event) => {
+          if (event.data.length <= 0) return;
+          const data = event.data[0];
+          verticalStep = ((data.y / (video.videoHeight - data.height)) - _this.getVerticalValue()) / 6;
+          horizontalStep = ((data.x / (video.videoWidth - data.width)) - _this.getHorizontalValue()) / 6;
+        });
+
+        const stepIntervalWorker = new Worker('./js/intervalWorker.js');
+        stepIntervalWorker.postMessage({interval: 1000 / 10 / 6});
+        stepIntervalWorker.addEventListener('message', () => {
+          const verticalValue = _this.getVerticalValue() + verticalStep;
+          const horizontalValue = _this.getHorizontalValue() + horizontalStep;
+          _this.setVerticalValue((verticalValue < 0) ? 0 : (verticalValue > 1) ? 1 : verticalValue);
+          _this.setHorizontalValue((horizontalValue < 0) ? 0 : (horizontalValue > 1) ? 1 : horizontalValue);
+        }, false);
+        intervalWorkers.push(stepIntervalWorker);
+
+        const faceTrackingIntervalWorker = new Worker('./js/intervalWorker.js');
+        faceTrackingIntervalWorker.postMessage({interval: 1000 / 10});
+        faceTrackingIntervalWorker.addEventListener('message', () => {
+          canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          tracking.track(canvas, objects);
+        }, false);
+        intervalWorkers.push(faceTrackingIntervalWorker);
 
         const closeEyeIntervalWorker = new Worker('./js/intervalWorker.js');
         closeEyeIntervalWorker.postMessage({interval: 1000});
