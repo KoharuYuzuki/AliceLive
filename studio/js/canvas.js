@@ -11,8 +11,6 @@
     canvasCtx = canvas.getContext('2d');
 
     backCanvas = document.createElement('canvas');
-    backCanvas.width = canvas.width;
-    backCanvas.height = canvas.height;
     backCanvasCtx = backCanvas.getContext('2d');
 
     const worker = new Worker('./js/intervalWorker.js');
@@ -90,6 +88,9 @@
   }, false);
 
   function draw () {
+    backCanvas.width = canvas.width;
+    backCanvas.height = canvas.height;
+
     if (drawSkip) {
       fillBlack();
       copyCanvas();
@@ -263,8 +264,15 @@
       else source.setFrameOpacity(0);
     }
 
-    const fontSize = 32;
-    const lineSpace = 8;
+    let fontSize, lineSpace;
+
+    if (fullHD) {
+      fontSize = 32;
+      lineSpace = 8;
+    } else {
+      fontSize = 21;
+      lineSpace = 4;
+    }
 
     backCanvasCtx.lineWidth = 6;
     backCanvasCtx.lineJoin = 'round';

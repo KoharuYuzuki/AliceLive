@@ -71,7 +71,7 @@ p, h1, input {
   margin: auto;
 }
 
-#setting #label, #setting #visualSource, #setting #soundSource, #setting #controller {
+#setting #label, #setting #visualSource, #setting #soundSource {
   width: calc(100vw / 3 * 2);
   left: 0;
 }
@@ -183,6 +183,7 @@ p, h1, input {
 }
 
 #setting #controller {
+  width: 100vw;
   bottom: 0;
   display: flex;
   border-radius: 16px 16px 0px 0px;
@@ -218,6 +219,11 @@ p, h1, input {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+#setting #controller .box.hd {
+  width: 50px;
+  right: 520px;
 }
 
 #setting #controller .box.fullscreen {
@@ -339,9 +345,10 @@ p, h1, input {
 
 #setting #properties #tools {
   width: 100%;
-  height: calc(100% - 32px);
+  height: calc(100% - 64px);
   position: absolute;
   margin: auto;
+  top: 0;
   bottom: 0;
   display: flex;
   flex-wrap: wrap;
