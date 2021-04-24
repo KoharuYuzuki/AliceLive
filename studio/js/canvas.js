@@ -384,7 +384,7 @@
   function drawLine (context, offsetX, offsetY, x1, y1, x2, y2) {
     context.beginPath();
     context.strokeStyle = '#252525';
-    context.lineWidth = 1;
+    context.lineWidth = 3;
     context.moveTo(x1 - offsetX, y1 - offsetY);
     context.lineTo(x2 - offsetX, y2 - offsetY);
     context.stroke();
