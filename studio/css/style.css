@@ -223,25 +223,30 @@ p, h1, input {
 
 #setting #controller .box.hd {
   width: 50px;
-  right: 520px;
+  right: 710px;
 }
 
 #setting #controller .box.fullscreen {
   width: 100px;
-  right: 390px;
+  right: 580px;
 }
 
 #setting #controller .box.loopBack {
   width: 250px;
-  right: 110px;
+  right: 300px;
 }
 
 #setting #controller .box.pause {
   width: 80px;
+  right: 190px;
+}
+
+#setting #controller .box.connectionReset {
+  width: 160px;
   right: 0px;
 }
 
-#setting #controller .box.pause .checkbox {
+#setting #controller .box.connectionReset .checkbox {
   margin: 0 8px 0 0;
 }
 

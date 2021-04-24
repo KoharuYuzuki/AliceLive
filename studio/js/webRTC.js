@@ -2,23 +2,30 @@
 
 (() => {
 
-  let connected = false;
+  let pc1 = null;
 
   addEventListener('load', () => {
-    document.querySelector('.pause .checkbox input').addEventListener('change', (event) => {
-      if (!event.target.checked) connected = false;
+    document.querySelector('.connectionReset .checkbox input').addEventListener('change', (event) => {
+      if (event.target.checked) {
+        if (pc1 !== null) {
+          pc1.close();
+          pc1 = null;
+        }
+        setTimeout(() => {
+          event.target.checked = false;
+        }, 500);
+      }
     }, false);
   }, false);
 
   chrome.runtime.onMessage.addListener((message) => {
-    if (!connected && (message.type === 'requestConnection')) {
+    if ((pc1 === null) && (message.type === 'requestConnection')) {
       connection();
-      connected = true;
     }
   });
 
   function connection () {
-    const pc1 = new RTCPeerConnection();
+    pc1 = new RTCPeerConnection();
 
     pc1.addEventListener('icecandidate', (event) => {
       chrome.runtime.sendMessage({

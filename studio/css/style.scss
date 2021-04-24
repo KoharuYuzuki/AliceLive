@@ -198,18 +198,22 @@ p, h1, input {
       align-items: center;
       &.hd {
         width: 50px;
-        right: 520px;
+        right: 710px;
       }
       &.fullscreen {
         width: 100px;
-        right: 390px;
+        right: 580px;
       }
       &.loopBack {
         width: 250px;
-        right: 110px;
+        right: 300px;
       }
       &.pause {
         width: 80px;
+        right: 190px;
+      }
+      &.connectionReset {
+        width: 160px;
         right: 0px;
         .checkbox {
           margin: 0 8px 0 0;
