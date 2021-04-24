@@ -25,7 +25,7 @@
       if (_this.type === 'avatar') {
         const intervalWorkers = [];
         const videoDevice = await selectDevice('video', {
-          video: {width: 512, height: 512}
+          video: {width: 256, height: 256}
         }).catch((e) => reject(e));
         let video;
         if (videoDevice) video = await getVideo(videoDevice.stream).catch((e) => reject(e));
