@@ -40,6 +40,7 @@
       let x, y, draw = false;
 
       canvas.addEventListener('mousedown', (event) => {
+        if (shiftKeyPress) return;
         const selectSource = document.querySelector('input[name="selectList"]:checked ~ div div input:checked');
         if (!selectSource) return;
         const uuid = selectSource.parentNode.dataset.uuid;
