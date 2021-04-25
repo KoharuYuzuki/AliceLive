@@ -4,12 +4,17 @@
 
   let verticalValue = 0.5, horizontalValue = 0.5;
   let openEye = true, openMouth = false;
-  let canvas, canvasCtx, canvasSize, mouseMoveArea;
+  let canvasCtx, tmpCanvasCtx, canvasSize, mouseMoveArea;
   let magnification = 1, enlarge = true;
 
   addEventListener('load', () => {
-    canvas = document.querySelector('canvas');
+    window.canvas = document.querySelector('canvas');
     canvasCtx = canvas.getContext('2d');
+
+    window.tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = canvas.width;
+    tmpCanvas.height = canvas.height;
+    tmpCanvasCtx = tmpCanvas.getContext('2d');
 
     canvasSize = getElements({
       width: '#controller .width',
@@ -53,6 +58,7 @@
         event.target.value = 0;
       }
       canvas.width = number;
+      tmpCanvas.width = number;
       saved = false;
       draw();
     }, false);
@@ -64,6 +70,7 @@
         event.target.value = 0;
       }
       canvas.height = number;
+      tmpCanvas.height = number;
       saved = false;
       draw();
     }, false);
@@ -89,7 +96,6 @@
   }
 
   function draw () {
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     fillWhite();
     for (let i = (sources.length - 1); i >= 0; i--) {
       if (
@@ -116,6 +122,20 @@
         verticalValue
       ) + (canvas.height - size.height) / 2;
 
+      const translate = {
+        x: move.pointX + x,
+        y: move.pointY + y
+      };
+
+      const magnification = (horizontalValue >= 0.5) ?
+      ((horizontalValue - 0.5) * 2 * verticalValue) : ((1 - (horizontalValue * 2)) * verticalValue);
+
+      const deg = (horizontalValue >= 0.5) ? move.rotate * magnification : -move.rotate * magnification;
+
+      tmpCanvasCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+      tmpCanvasCtx.translate(translate.x, translate.y);
+      tmpCanvasCtx.rotate(deg * Math.PI / 180);
+
       if (move.splitScaling !== 0) {
         let scaling;
         if (horizontalValue < 0.5) {
@@ -124,38 +144,42 @@
           scaling = move.splitScaling * ((horizontalValue - 0.5) * 2);
         }
 
-        canvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           sources[i].getData(),
           0,
           0,
           (size.width / 2),
           size.height,
-          x,
-          y,
+          x - translate.x,
+          y - translate.y,
           (size.width / 2) + scaling,
           size.height
         );
 
-        canvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           sources[i].getData(),
           (size.width / 2),
           0,
           (size.width / 2),
           size.height,
-          x + (size.width / 2) + scaling,
-          y,
+          x + (size.width / 2) + scaling - translate.x,
+          y - translate.y,
           (size.width / 2) - scaling,
           size.height
         );
       } else {
-        canvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           sources[i].getData(),
-          x,
-          y,
+          x - translate.x,
+          y - translate.y,
           size.width,
           size.height
         );
       }
+
+      tmpCanvasCtx.rotate(-deg * Math.PI / 180);
+      tmpCanvasCtx.translate(-translate.x, -translate.y);
+      canvasCtx.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
     }
   }
 

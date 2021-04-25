@@ -39,7 +39,7 @@ p, h1, input {
 }
 
 #label, #editor, #controller {
-  max-width: 800px;
+  max-width: 1100px;
 }
 
 #label {
@@ -59,7 +59,7 @@ p, h1, input {
 }
 
 #label .box {
-  width: 520px;
+  width: 680px;
   height: 32px;
   position: absolute;
   margin: auto;
@@ -129,7 +129,7 @@ p, h1, input {
 }
 
 #editor div div {
-  width: 520px;
+  width: 680px;
   height: 32px;
   position: absolute;
   margin: auto;
@@ -257,7 +257,7 @@ p, h1, input {
 }
 
 #preview {
-  min-width: calc(100vw - 800px);
+  min-width: calc(100vw - 1100px);
   height: 100vh;
   right: 0;
   overflow: scroll;
@@ -272,7 +272,7 @@ p, h1, input {
 
 #mouseMoveArea {
   width: calc(50vw - 8px);
-  min-width: calc(100vw - 800px - 8px);
+  min-width: calc(100vw - 1100px - 8px);
   height: calc(100vh - 8px);
   position: absolute;
   margin: auto;

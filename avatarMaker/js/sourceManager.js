@@ -4,7 +4,7 @@
 
   window.sources = [];
 
-  let buttons, editor, canvas, canvasSize;
+  let buttons, editor, canvasSize;
 
   addEventListener('load', () => {
     buttons = getElements({
@@ -17,8 +17,6 @@
     });
 
     editor = document.querySelector('#editor');
-
-    canvas = document.querySelector('canvas');
 
     canvasSize = getElements({
       width: '#controller .width',
@@ -161,7 +159,7 @@
 
   function save () {
     const obj = {
-      avatarVersion: 1.1,
+      avatarVersion: 1.2,
       canvasSize: {
         width: canvas.width,
         height: canvas.height
@@ -205,14 +203,16 @@
         return;
       }
       sources = [];
-      if (obj.avatarVersion && ([1, 1.1].includes(obj.avatarVersion))) {
+      if (obj.avatarVersion && ([1, 1.1, 1.2].includes(obj.avatarVersion))) {
         if (obj.canvasSize) {
           if (obj.canvasSize.width) {
             canvas.width = obj.canvasSize.width;
+            tmpCanvas.width = obj.canvasSize.width;
             canvasSize.width.value = canvas.width;
           }
           if (obj.canvasSize.height) {
             canvas.height = obj.canvasSize.height;
+            tmpCanvas.height = obj.canvasSize.height;
             canvasSize.height.value = canvas.height;
           }
         }
@@ -228,6 +228,9 @@
               if (parts.move.top) source.setMoveTop(parts.move.top);
               if (parts.move.bottom) source.setMoveBottom(parts.move.bottom);
               if (parts.move.splitScaling) source.setSplitScaling(parts.move.splitScaling);
+              if (parts.move.pointX) source.setPointX(parts.move.pointX);
+              if (parts.move.pointY) source.setPointY(parts.move.pointY);
+              if (parts.move.rotate) source.setRotate(parts.move.rotate);
             }
             if (parts.openEye) source.setOpenEye(true);
             if (parts.closedEye) source.setClosedEye(true);
@@ -275,7 +278,7 @@
         const box = document.createElement('div');
         div.appendChild(box);
 
-        ['left', 'right', 'top', 'bottom', 'splitScaling'].forEach((type) => {
+        ['left', 'right', 'top', 'bottom', 'splitScaling', 'pointX', 'pointY', 'rotate'].forEach((type) => {
           const input = document.createElement('input');
           input.setAttribute('type', 'number');
           input.setAttribute('step', '1');
@@ -300,6 +303,15 @@
                 break;
               case 'splitScaling':
                 source.setSplitScaling(number);
+                break;
+              case 'pointX':
+                source.setPointX(number);
+                break;
+              case 'pointY':
+                source.setPointY(number);
+                break;
+              case 'rotate':
+                source.setRotate(number);
                 break;
             }
             saved = false;
