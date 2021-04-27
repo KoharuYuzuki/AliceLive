@@ -190,7 +190,7 @@
             continue;
           }
           data = {};
-          if (obj.avatarVersion && ([1, 1.1].includes(obj.avatarVersion))) {
+          if (obj.avatarVersion && ([1, 1.1, 1.2].includes(obj.avatarVersion))) {
             if (obj.canvasSize) {
               data.canvasSize = {};
               if (obj.canvasSize.width) data.canvasSize.width = obj.canvasSize.width;
@@ -214,6 +214,9 @@
                   if (parts.move.top) source.setMoveTop(parts.move.top);
                   if (parts.move.bottom) source.setMoveBottom(parts.move.bottom);
                   if (parts.move.splitScaling) source.setSplitScaling(parts.move.splitScaling);
+                  if (parts.move.pointX) source.setPointX(parts.move.pointX);
+                  if (parts.move.pointY) source.setPointY(parts.move.pointY);
+                  if (parts.move.rotate) source.setRotate(parts.move.rotate);
                 }
                 if (parts.openEye) source.setOpenEye(true);
                 if (parts.closedEye) source.setClosedEye(true);

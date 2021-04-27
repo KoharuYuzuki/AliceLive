@@ -3,7 +3,7 @@
 (() => {
 
   const uuids = [];
-  let canvas, canvasCtx, backCanvas, backCanvasCtx, drawSkip = false;
+  let canvas, canvasCtx, backCanvas, backCanvasCtx, tmpCanvas, tmpCanvasCtx, drawSkip = false;
 
   addEventListener('load', () => {
     canvas = document.querySelector('canvas');
@@ -12,6 +12,9 @@
 
     backCanvas = document.createElement('canvas');
     backCanvasCtx = backCanvas.getContext('2d');
+
+    tmpCanvas = document.createElement('canvas');
+    tmpCanvasCtx = tmpCanvas.getContext('2d');
 
     const worker = new Worker('./js/intervalWorker.js');
     worker.postMessage({interval: 1000 / 60});
@@ -141,80 +144,107 @@
   function drawAvatar (source) {
     const data = source.getData();
     const deformation = source.getDeformation();
+    const verticalValue = source.getVerticalValue();
+    const horizontalValue = source.getHorizontalValue();
+
+    const times = {
+      width: deformation.w / data.canvasSize.width,
+      height: deformation.h / data.canvasSize.height
+    };
+
+    tmpCanvas.width = data.canvasSize.width;
+    tmpCanvas.height = data.canvasSize.height;
+
     for (let j = (data.parts.length - 1); j >= 0; j--) {
       const parts = data.parts[j];
+
       if (
         (parts.getOpenEye() && !source.getEyeOpen()) ||
         (parts.getClosedEye() && source.getEyeOpen())
       ) continue
+
       if (
         (parts.getOpenMouth() && !source.getMouthOpen()) ||
         (parts.getClosedMouth() && source.getMouthOpen())
       ) continue;
+
       const move = parts.getMove();
       const size = parts.getSize();
-      const times = {
-        width: deformation.w / data.canvasSize.width,
-        height: deformation.h / data.canvasSize.height
-      };
 
-      const x = deformation.x + (
-        calcCoordinate(
-          move.left,
-          move.right,
-          source.getHorizontalValue()
-        ) +
-        (data.canvasSize.width - size.width) / 2
-      ) * times.width;
-      const y = deformation.y + (
-        calcCoordinate(
-          move.top,
-          move.bottom,
-          source.getVerticalValue()
-        ) +
-        (data.canvasSize.height - size.height) / 2
-      ) * times.height;
+      const partsX = calcCoordinate(
+        move.left,
+        move.right,
+        horizontalValue
+      ) + (data.canvasSize.width - size.width) / 2;
+      const partsY = calcCoordinate(
+        move.top,
+        move.bottom,
+        verticalValue
+      ) + (data.canvasSize.height - size.height) / 2;
+
+      const magnification = (horizontalValue >= 0.5) ? ((horizontalValue - 0.5) * 2 * verticalValue) : ((1 - (horizontalValue * 2)) * verticalValue);
+      const deg = (horizontalValue >= 0.5) ? (move.rotate * magnification) : (-move.rotate * magnification);
+      const rad = deg * Math.PI / 180;
+
+      tmpCanvasCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+      tmpCanvasCtx.translate(move.pointX, move.pointY);
+      tmpCanvasCtx.rotate(rad);
 
       if (move.splitScaling !== 0) {
-        let scaling;
-        if (source.getHorizontalValue() < 0.5) {
-          scaling = -move.splitScaling * (1 - (source.getHorizontalValue() * 2));
-        } else {
-          scaling = move.splitScaling * ((source.getHorizontalValue() - 0.5) * 2);
-        }
+        const scaling = (horizontalValue < 0.5) ? (-move.splitScaling * (1 - (horizontalValue * 2))) : (move.splitScaling * ((horizontalValue - 0.5) * 2));
+        const halfWidth = (size.width / 2);
 
-        backCanvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           parts.getData(),
           0,
           0,
-          (size.width / 2),
+          halfWidth,
           size.height,
-          x,
-          y,
-          ((size.width / 2) + scaling) * times.width,
-          size.height * times.height
+          partsX - move.pointX,
+          partsY - move.pointY,
+          halfWidth + scaling,
+          size.height
         );
 
-        backCanvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           parts.getData(),
-          (size.width / 2),
+          halfWidth,
           0,
-          (size.width / 2),
+          halfWidth,
           size.height,
-          x + ((size.width / 2) + scaling) * times.width,
-          y,
-          ((size.width) / 2 - scaling) * times.width,
-          size.height * times.height
+          partsX - move.pointX + halfWidth + scaling - 1,
+          partsY - move.pointY,
+          halfWidth - scaling,
+          size.height
         );
       } else {
-        backCanvasCtx.drawImage(
+        tmpCanvasCtx.drawImage(
           parts.getData(),
-          x,
-          y,
-          size.width * times.width,
-          size.height * times.height
+          0,
+          0,
+          size.width,
+          size.height,
+          partsX - move.pointX,
+          partsY - move.pointY,
+          size.width,
+          size.height
         );
       }
+
+      tmpCanvasCtx.rotate(-rad);
+      tmpCanvasCtx.translate(-move.pointX, -move.pointY);
+
+      backCanvasCtx.drawImage(
+        tmpCanvas,
+        0,
+        0,
+        tmpCanvas.width,
+        tmpCanvas.height,
+        deformation.x,
+        deformation.y,
+        tmpCanvas.width * times.width,
+        tmpCanvas.height * times.height
+      );
     }
   }
 

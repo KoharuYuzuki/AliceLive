@@ -331,7 +331,7 @@
       if (_this.type === 'avatarImage') {
         const image = await getImage(data).catch((e) => reject(e));
         _this.move = {};
-        _this.setMoveAll(0, 0, 0, 0, 0);
+        _this.setMoveAll(0, 0, 0, 0, 0, 0, 0, 0);
         _this.setOpenEye(false);
         _this.setClosedEye(false);
         _this.setOpenMouth(false);
@@ -488,12 +488,15 @@
     setGate: function (value) {
       this.gate = value;
     },
-    setMoveAll: function (left, right, top, bottom, splitScaling) {
+    setMoveAll: function (left, right, top, bottom, splitScaling, pointX, pointY, rotate) {
       this.move.left = left;
       this.move.right = right;
       this.move.top = top;
       this.move.bottom = bottom;
       this.move.splitScaling = splitScaling;
+      this.move.pointX = pointX;
+      this.move.pointY = pointY;
+      this.move.rotate = rotate;
     },
     setMoveLeft: function (left) {
       this.move.left = left;
@@ -509,6 +512,15 @@
     },
     setSplitScaling: function (splitScaling) {
       this.move.splitScaling = splitScaling;
+    },
+    setPointX: function (pointX) {
+      this.move.pointX = pointX;
+    },
+    setPointY: function (pointY) {
+      this.move.pointY = pointY;
+    },
+    setRotate: function (rotate) {
+      this.move.rotate = rotate;
     },
     setOpenEye: function (bool) {
       this.openEye = bool;
