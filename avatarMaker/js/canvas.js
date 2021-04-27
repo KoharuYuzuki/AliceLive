@@ -124,13 +124,14 @@
 
       const magnification = (horizontalValue >= 0.5) ? ((horizontalValue - 0.5) * 2 * verticalValue) : ((1 - (horizontalValue * 2)) * verticalValue);
       const deg = (horizontalValue >= 0.5) ? (move.rotate * magnification) : (-move.rotate * magnification);
+      const rad = deg * Math.PI / 180;
 
       tmpCanvasCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
       tmpCanvasCtx.translate(move.pointX, move.pointY);
-      tmpCanvasCtx.rotate(deg * Math.PI / 180);
+      tmpCanvasCtx.rotate(rad);
 
       if (move.splitScaling !== 0) {
-        let scaling = (horizontalValue < 0.5) ? (-move.splitScaling * (1 - (horizontalValue * 2))) : (move.splitScaling * ((horizontalValue - 0.5) * 2));
+        const scaling = (horizontalValue < 0.5) ? (-move.splitScaling * (1 - (horizontalValue * 2))) : (move.splitScaling * ((horizontalValue - 0.5) * 2));
         const halfWidth = (size.width / 2);
 
         tmpCanvasCtx.drawImage(
@@ -170,7 +171,7 @@
         );
       }
 
-      tmpCanvasCtx.rotate(-deg * Math.PI / 180);
+      tmpCanvasCtx.rotate(-rad);
       tmpCanvasCtx.translate(-move.pointX, -move.pointY);
       canvasCtx.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
     }
