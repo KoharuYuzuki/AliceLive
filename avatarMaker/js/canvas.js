@@ -122,63 +122,56 @@
         verticalValue
       ) + (canvas.height - size.height) / 2;
 
-      const translate = {
-        x: move.pointX + x,
-        y: move.pointY + y
-      };
-
-      const magnification = (horizontalValue >= 0.5) ?
-      ((horizontalValue - 0.5) * 2 * verticalValue) : ((1 - (horizontalValue * 2)) * verticalValue);
-
-      const deg = (horizontalValue >= 0.5) ? move.rotate * magnification : -move.rotate * magnification;
+      const magnification = (horizontalValue >= 0.5) ? ((horizontalValue - 0.5) * 2 * verticalValue) : ((1 - (horizontalValue * 2)) * verticalValue);
+      const deg = (horizontalValue >= 0.5) ? (move.rotate * magnification) : (-move.rotate * magnification);
 
       tmpCanvasCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-      tmpCanvasCtx.translate(translate.x, translate.y);
+      tmpCanvasCtx.translate(move.pointX, move.pointY);
       tmpCanvasCtx.rotate(deg * Math.PI / 180);
 
       if (move.splitScaling !== 0) {
-        let scaling;
-        if (horizontalValue < 0.5) {
-          scaling = -move.splitScaling * (1 - (horizontalValue * 2));
-        } else {
-          scaling = move.splitScaling * ((horizontalValue - 0.5) * 2);
-        }
+        let scaling = (horizontalValue < 0.5) ? (-move.splitScaling * (1 - (horizontalValue * 2))) : (move.splitScaling * ((horizontalValue - 0.5) * 2));
+        const halfWidth = (size.width / 2);
 
         tmpCanvasCtx.drawImage(
           sources[i].getData(),
           0,
           0,
-          (size.width / 2),
+          halfWidth,
           size.height,
-          x - translate.x,
-          y - translate.y,
-          (size.width / 2) + scaling,
+          x - move.pointX,
+          y - move.pointY,
+          halfWidth + scaling,
           size.height
         );
 
         tmpCanvasCtx.drawImage(
           sources[i].getData(),
-          (size.width / 2),
+          halfWidth,
           0,
-          (size.width / 2),
+          halfWidth,
           size.height,
-          x + (size.width / 2) + scaling - translate.x,
-          y - translate.y,
-          (size.width / 2) - scaling,
+          x - move.pointX + halfWidth + scaling - 1,
+          y - move.pointY,
+          halfWidth - scaling,
           size.height
         );
       } else {
         tmpCanvasCtx.drawImage(
           sources[i].getData(),
-          x - translate.x,
-          y - translate.y,
+          0,
+          0,
+          size.width,
+          size.height,
+          x - move.pointX,
+          y - move.pointY,
           size.width,
           size.height
         );
       }
 
       tmpCanvasCtx.rotate(-deg * Math.PI / 180);
-      tmpCanvasCtx.translate(-translate.x, -translate.y);
+      tmpCanvasCtx.translate(-move.pointX, -move.pointY);
       canvasCtx.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
     }
   }
