@@ -72,7 +72,7 @@
           resolve(result[0]);
         }
       })
-      .catch((e) => console.error(e));
+      .catch((e) => reject(e));
     });
   }
 
