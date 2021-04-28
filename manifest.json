@@ -16,10 +16,10 @@
         "https://studio.youtube.com/*/livestreaming*"
       ],
       "js": [
-        "contentScript/loader.js",
-        "contentScript/webRTC.js",
-        "contentScript/invert.js",
-        "contentScript/comment.js"
+        "contentScript/youtubeStudio/loader.js",
+        "contentScript/youtubeStudio/invert.js",
+        "contentScript/youtubeStudio/comment.js",
+        "contentScript/webRTC.js"
       ],
       "run_at": "document_start"
     }
@@ -39,8 +39,8 @@
     },
     {
       "resources": [
-        "contentScript/hook.js",
-        "contentScript/keyframe.css"
+        "contentScript/youtubeStudio/keyframe.css",
+        "contentScript/hook.js"
       ],
       "matches": [
         "https://studio.youtube.com/*"
