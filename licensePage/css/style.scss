@@ -17,13 +17,32 @@ p, h1, input {
   font-family: 'Noto Sans JP', sans-serif;
 }
 
-p {
+p, h1 {
   width: 800px;
-  font-size: 14px;
   color: $white;
   margin: 4px 0;
   text-align: center;
   transform: translateX(calc(50vw - 800px / 2));
+}
+
+p {
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+img {
+  width: 400px;
+  height: auto;
+  transform: translateX(calc(50vw - 400px / 2));
+}
+
+a {
+  &:link, &:visited, &:hover, &:active {
+    color: $white;
+  }
 }
 
 ::-webkit-scrollbar {
